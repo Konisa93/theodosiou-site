@@ -12,7 +12,7 @@ Built with [Astro](https://astro.build) as a static site. It has no database, no
 
 ## 1. Run it on your computer
 
-You need [Node.js](https://nodejs.org) 22 or newer.
+You need [Node.js](https://nodejs.org) 24 (the version the GitHub build uses).
 
 ```bash
 npm install      # once, to download the dependencies
