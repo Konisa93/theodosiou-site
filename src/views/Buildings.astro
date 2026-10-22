@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import PageIntro from '../components/PageIntro.astro';
 import BuildingElevation from '../components/BuildingElevation.astro';
-import { buildings, fmt, allLeased, statusLabel, statusClass } from '../lib/buildings';
+import { buildings, areaLabel, allLeased, statusLabel, statusClass } from '../lib/buildings';
 import { path, type Lang } from '../i18n/ui';
 
 interface Props { lang: Lang; }
@@ -15,7 +15,7 @@ const copy = {
     description: 'Τρία αυτοτελή εμπορικά κτίρια στο Χαλάνδρι. Κάθε κτίριο μισθώνεται ολόκληρο, σε έναν μισθωτή.',
     eyebrow: 'Τα κτίρια',
     lines: ['Τρία κτίρια,', 'ολόκληρα για εσάς.'],
-    lead: 'Κάθε κτίριο μισθώνεται ολόκληρο σε έναν μισθωτή, απευθείας από την ιδιοκτήτρια εταιρεία.',
+    lead: 'Κάθε κτίριο μισθώνεται ολόκληρο σε έναν μισθωτή, από την ιδιοκτήτρια εταιρεία.',
     notice: 'Όλα τα κτίρια είναι αυτή τη στιγμή μισθωμένα. Αφήστε μας τα στοιχεία σας και θα επικοινωνήσουμε μαζί σας όταν κάποιο διατεθεί.',
     noticeLink: 'Εκδήλωση ενδιαφέροντος',
     use: 'Χρήση', floors: 'Όροφοι', area: 'Εμβαδόν κτιρίου', areaShort: 'Εμβαδόν', plot: 'Οικόπεδο', status: 'Κατάσταση', building: 'Κτίριο',
@@ -25,14 +25,14 @@ const copy = {
     summaryEyebrow: 'Συνοπτικά',
     summaryTitle: 'Όλα τα κτίρια με μια ματιά.',
     caption: 'Σύνοψη των τριών κτιρίων',
-    sample: 'Δείγμα στοιχείων: εμβαδά, όροφοι και διευθύνσεις θα αντικατασταθούν με τα πραγματικά.',
+    sample: 'Δείγμα στοιχείων: όροφοι και διευθύνσεις θα αντικατασταθούν με τα πραγματικά.',
   },
   en: {
     title: 'The buildings · Theodosiou Texniki AE',
     description: 'Three standalone commercial buildings in Chalandri, Athens. Each building is leased as a whole, to a single tenant.',
     eyebrow: 'The buildings',
     lines: ['Three buildings,', 'each one entirely yours.'],
-    lead: 'Each building is leased as a whole to a single tenant, directly from the owning company.',
+    lead: 'Each building is leased as a whole to a single tenant by the owning company.',
     notice: "All buildings are currently leased. Leave us your details and we'll contact you when one becomes available.",
     noticeLink: 'Register your interest',
     use: 'Use', floors: 'Floors', area: 'Building area', areaShort: 'Area', plot: 'Plot', status: 'Status', building: 'Building',
@@ -42,7 +42,7 @@ const copy = {
     summaryEyebrow: 'Summary',
     summaryTitle: 'All buildings at a glance.',
     caption: 'Summary of the three buildings',
-    sample: 'Sample figures: areas, floors and addresses will be replaced with the real ones.',
+    sample: 'Sample figures: floors and addresses will be replaced with the real ones.',
   },
 }[lang];
 ---
@@ -75,8 +75,8 @@ const copy = {
           <dl class="facts" data-reveal>
             <div><dt class="t-label muted">{copy.use}</dt><dd>{b.use[lang]}</dd></div>
             <div><dt class="t-label muted">{copy.floors}</dt><dd class="num">{b.floors}</dd></div>
-            <div><dt class="t-label muted">{copy.area}</dt><dd class="num">{fmt(b.area, lang)} m²</dd></div>
-            <div><dt class="t-label muted">{copy.plot}</dt><dd class="num">{fmt(b.plot, lang)} m²</dd></div>
+            <div><dt class="t-label muted">{copy.area}</dt><dd class="num">{areaLabel(b.area, lang)}</dd></div>
+            <div><dt class="t-label muted">{copy.plot}</dt><dd class="num">{areaLabel(b.plot, lang)}</dd></div>
             <div><dt class="t-label muted">{copy.status}</dt><dd><span class:list={['status', statusClass(b)]}>{statusLabel(b, lang)}</span></dd></div>
           </dl>
 
@@ -118,8 +118,8 @@ const copy = {
               <th scope="row" data-label={copy.building} class="code"><a class="link" href={`#building-${b.id}`}>{b.label[lang]}</a></th>
               <td data-label={copy.use}>{b.use[lang]}</td>
               <td data-label={copy.floors} class="is-num">{b.floors}</td>
-              <td data-label={copy.areaShort} class="is-num">{fmt(b.area, lang)} m²</td>
-              <td data-label={copy.plot} class="is-num">{fmt(b.plot, lang)} m²</td>
+              <td data-label={copy.areaShort} class="is-num">{areaLabel(b.area, lang)}</td>
+              <td data-label={copy.plot} class="is-num">{areaLabel(b.plot, lang)}</td>
               <td data-label={copy.status}><span class:list={['status', statusClass(b)]}>{statusLabel(b, lang)}</span></td>
               <td><a class="btn btn--outline btn--small" href={`${contact}?building=${b.id}`}>{copy.interested} <span class="btn__arrow" aria-hidden="true">→</span></a></td>
             </tr>

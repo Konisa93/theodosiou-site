@@ -72,7 +72,6 @@ export function buildSchema({ lang, page, site }: { lang: Lang; page: RouteKey; 
         description: b.use[lang],
         containedInPlace: { '@type': 'City', name: lang === 'el' ? 'Χαλάνδρι' : 'Chalandri' },
         additionalProperty: [
-          { '@type': 'PropertyValue', name: lang === 'el' ? 'Εμβαδόν' : 'Floor area', value: b.area, unitCode: 'MTK' },
           { '@type': 'PropertyValue', name: lang === 'el' ? 'Όροφοι' : 'Floors', value: b.floors },
         ],
         // Owned and leased by the organisation; tenants are confidential.

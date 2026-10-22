@@ -35,7 +35,7 @@ const scale = [
   { name: 'H1', cls: 't-h1', spec: 'Noto Serif Display 340 · clamp(40–76px)', sample: 'Τα κτίρια' },
   { name: 'H2', cls: 't-h2', spec: 'Noto Serif Display 340 · clamp(32–56px) · 1.15', sample: 'Τρία κτίρια. Ένας ιδιοκτήτης.' },
   { name: 'H3', cls: 't-h3', spec: 'Noto Serif Display 340 · clamp(24–32px)', sample: 'Κτίριο Β · Εμπορικό κτίριο' },
-  { name: 'Lead', cls: 't-lead', spec: 'Inter 400 · clamp(19–22px) · 1.5', sample: 'Τρία αυτοτελή εμπορικά κτίρια, που μισθώνονται ολόκληρα, απευθείας από την ιδιοκτήτρια εταιρεία.' },
+  { name: 'Lead', cls: 't-lead', spec: 'Inter 400 · clamp(19–22px) · 1.5', sample: 'Τρία αυτοτελή εμπορικά κτίρια, που μισθώνονται ολόκληρα από την ιδιοκτήτρια εταιρεία.' },
   { name: 'Body', cls: 't-body', spec: 'Inter 400 · 17px · 1.6', sample: 'Από το 2018 η εταιρεία διαχειρίζεται τρία εμπορικά κτίρια στο Χαλάνδρι. Κάθε κτίριο μισθώνεται ολόκληρο σε έναν μισθωτή και συντηρείται με την τεχνική εμπειρία μιας κατασκευαστικής εταιρείας.' },
   { name: 'Small', cls: 't-small', spec: 'Inter 400 · 15px', sample: 'Απαντάμε συνήθως εντός μίας εργάσιμης ημέρας.' },
   { name: 'Label', cls: 't-label', spec: 'Inter 500 · 12px · uppercase · 0.14em', sample: 'Τα κτίρια · Ενδιαφέρομαι' },
@@ -62,7 +62,7 @@ const fmt = (n: number) => n.toLocaleString('el-GR');
         <span class="mask"><span>κτίρια στο</span></span>
         <span class="mask"><span>Χαλάνδρι.</span></span>
       </h1>
-      <p class="t-lead" data-reveal style="--i:14">Τρία αυτοτελή κτίρια, που μισθώνονται ολόκληρα, απευθείας από την ιδιοκτήτρια εταιρεία.</p>
+      <p class="t-lead" data-reveal style="--i:14">Τρία αυτοτελή κτίρια, που μισθώνονται ολόκληρα από την ιδιοκτήτρια εταιρεία.</p>
       <div class="sg-hero__ctas" data-reveal style="--i:16">
         <a class="btn" href="#components">Δείτε τα κτίρια <span class="btn__arrow" aria-hidden="true">→</span></a>
         <a class="link" href="#components">Επικοινωνία</a>
@@ -80,7 +80,6 @@ const fmt = (n: number) => n.toLocaleString('el-GR');
     <dl class="numbers" data-reveal-group>
       <div data-reveal><dt class="t-label muted">Κτίρια</dt><dd class="t-h1 num" data-count="3">3</dd></div>
       <div data-reveal><dt class="t-label muted">Από το</dt><dd class="t-h1 num">2018</dd></div>
-      <div data-reveal><dt class="t-label muted">Συνολικά m²</dt><dd class="t-h1 num" data-count="4850">4.850</dd></div>
       <div data-reveal><dt class="t-label muted">Μισθωμένα</dt><dd class="t-h1 num"><span data-count="100">100</span>%</dd></div>
     </dl>
     <hr class="rule" data-rule />
@@ -241,8 +240,8 @@ const fmt = (n: number) => n.toLocaleString('el-GR');
                 <td data-label="Κτίριο" class="code">Κτίριο {r.building}</td>
                 <td data-label="Χρήση">{r.use}</td>
                 <td data-label="Όροφοι" class="is-num">{r.floors}</td>
-                <td data-label="Εμβαδόν" class="is-num">{fmt(r.area)} m²</td>
-                <td data-label="Οικόπεδο" class="is-num">{fmt(r.plot)} m²</td>
+                <td data-label="Εμβαδόν" class="is-num">—</td>
+                <td data-label="Οικόπεδο" class="is-num">—</td>
                 <td data-label="Κατάσταση"><span class:list={['status', { 'status--soon': r.status === 'soon', 'status--rented': r.status === 'rented' }]}>{r.statusLabel}</span></td>
                 <td>
                   <a class="btn btn--outline btn--small" href="#form-demo">Ενδιαφέρομαι <span class="btn__arrow" aria-hidden="true">→</span></a>
@@ -316,7 +315,7 @@ const fmt = (n: number) => n.toLocaleString('el-GR');
       </div>
       <div class="graphics grid">
         <figure class="graphics__plan">
-          <FloorPlan area="140 m²" />
+          <FloorPlan area="Ισόγειο" />
           <figcaption class="t-label">Κάτοψη ισογείου</figcaption>
         </figure>
         <ul class="activities" data-reveal-group>
@@ -372,7 +371,7 @@ const fmt = (n: number) => n.toLocaleString('el-GR');
         <div class="motion-demo" id="demo-count">
           <p class="t-label muted">Μετρητής</p>
           <div class="motion-demo__stage">
-            <span class="t-h1 num" data-count="4850">4.850</span><span class="t-h3"> m²</span>
+            <span class="t-h1 num" data-count="100">100</span><span class="t-h3">%</span>
           </div>
           <button class="sg-replay sg-replay--inline t-label" type="button" data-replay="#demo-count">↺ Επανάληψη</button>
         </div>
@@ -439,7 +438,7 @@ const fmt = (n: number) => n.toLocaleString('el-GR');
 
   /* Numbers */
   .sg-numbers { padding-bottom: var(--s-9); }
-  .numbers { display: grid; grid-template-columns: repeat(4, 1fr); padding-block: var(--s-7); }
+  .numbers { display: grid; grid-template-columns: repeat(3, 1fr); padding-block: var(--s-7); }
   .numbers > div { display: grid; gap: var(--s-3); padding-right: var(--s-5); }
   .numbers > div + div { border-left: 1px solid var(--hairline); padding-left: var(--s-6); }
   .sg-note { margin-top: var(--s-4); }

@@ -1,5 +1,5 @@
 {
-  "_note": "SAMPLE DATA. Replace with the client real figures. Never add tenant names. availableFrom is an ISO date (YYYY-MM-DD) when status is available_from.",
+  "_note": "SAMPLE DATA. Replace with the client real figures. Never add tenant names. area/plot: null shows a dash (the client prefers not to publish square metres). availableFrom is an ISO date (YYYY-MM-DD) when status is available_from.",
   "buildings": [
     {
       "id": "a",
@@ -20,8 +20,8 @@
         "en": "Commercial building"
       },
       "floors": 3,
-      "area": 1250,
-      "plot": 900,
+      "area": null,
+      "plot": null,
       "status": "leased",
       "availableFrom": null,
       "shape": {
@@ -62,8 +62,8 @@
         "en": "Commercial building"
       },
       "floors": 4,
-      "area": 1850,
-      "plot": 1100,
+      "area": null,
+      "plot": null,
       "status": "leased",
       "availableFrom": null,
       "shape": {
@@ -105,8 +105,8 @@
         "en": "Commercial building"
       },
       "floors": 3,
-      "area": 1750,
-      "plot": 1000,
+      "area": null,
+      "plot": null,
       "status": "leased",
       "availableFrom": null,
       "shape": {

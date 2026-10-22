@@ -56,8 +56,8 @@ const h = (type, style, children) => ({ type, props: { style, children } });
 const img = (src, width, height) => ({ type: 'img', props: { src, width, height } });
 
 const copy = {
-  el: { name: 'ΘΕΟΔΟΣΙΟΥ', sub: 'ΤΕΧΝΙΚΗ Α.Ε.', title: ['Εμπορικά κτίρια', 'στο Χαλάνδρι.'], foot: 'ΤΡΙΑ ΑΥΤΟΤΕΛΗ ΚΤΙΡΙΑ · ΑΠΕΥΘΕΙΑΣ ΑΠΟ ΤΟΝ ΙΔΙΟΚΤΗΤΗ', letters: ['Α', 'Β', 'Γ'] },
-  en: { name: 'THEODOSIOU', sub: 'TEXNIKI AE', title: ['Commercial buildings', 'in Chalandri.'], foot: 'STANDALONE BUILDINGS · DIRECT FROM THE OWNER', letters: ['A', 'B', 'C'] },
+  el: { name: 'ΘΕΟΔΟΣΙΟΥ', sub: 'ΤΕΧΝΙΚΗ Α.Ε.', title: ['Εμπορικά κτίρια', 'στο Χαλάνδρι.'], foot: 'ΤΡΙΑ ΑΥΤΟΤΕΛΗ ΚΤΙΡΙΑ · ΜΙΣΘΩΝΟΝΤΑΙ ΟΛΟΚΛΗΡΑ', letters: ['Α', 'Β', 'Γ'] },
+  en: { name: 'THEODOSIOU', sub: 'TEXNIKI AE', title: ['Commercial buildings', 'in Chalandri.'], foot: 'THREE STANDALONE BUILDINGS · LEASED AS A WHOLE', letters: ['A', 'B', 'C'] },
 };
 
 async function ogImage(lang) {

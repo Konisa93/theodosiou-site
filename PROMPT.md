@@ -23,7 +23,8 @@ The design direction is **minimal luxury with professional motion**: think of an
 - **Legal details for the footer (required for an Α.Ε. in Greece):** ΓΕΜΗ [GEMI_NUMBER], ΑΦΜ [VAT_NUMBER], ΔΟΥ [TAX_OFFICE]
 - **What they do:** a technical and construction company that owns and manages **3 commercial buildings** in Chalandri. The buildings were **transferred into the company in 2018** (they were not built in 2018, and the site must not claim the company built them). Each building is leased **whole and separately** to one tenant. There are no individual units or floors for rent.
 - **Current status:** all three buildings are currently leased to well-known retail chains.
-- **Main selling point:** tenants deal directly with the owning company (no agents or middlemen), whose technical background means the buildings are well maintained and can be adapted to a tenant's needs.
+- **Main selling point:** one owning company with a technical background, so the buildings are well maintained and can be adapted to a tenant's needs. Leasing may go through agents, so never claim "no agents", "no middlemen" or "directly from the owner".
+- **No square metres:** building and plot areas are not published. Show a dash (—) wherever an area would appear, and show no total area.
 
 ## 1a. Hard rule: tenants stay confidential
 
@@ -90,7 +91,7 @@ Motion should feel **slow, smooth and precise**, like an architect's pen, never 
 - **Hero on load:** the 3-building line drawing draws itself in (stroke-dashoffset, staggered per building, ~1.6s), then the headline reveals line by line (masked slide-up of 100%, 80ms stagger), then the subtext and buttons fade up. Total under 2.2s; content must be readable immediately even if JS fails.
 - **Scroll reveals:** sections fade and rise 16–24px max, once only (IntersectionObserver, threshold ~0.2), with a 60–80ms stagger for groups. Never animate large blocks of body text word by word.
 - **Hairline rules** extend from 0 to 100% width as they enter the viewport.
-- **Key numbers** (3 buildings, since 2018, m²) count up once, quickly (~1s), using tabular figures so the width doesn't jump.
+- **Key numbers** (3 buildings, since 2018, % leased) count up once, quickly (~1s), using tabular figures so the width doesn't jump.
 - **Page transitions:** Astro View Transitions with a subtle 250–300ms cross-fade. The header stays in place.
 - **Micro-interactions:**
   - Text links: underline grows from left on hover (`--dur-fast`)
@@ -120,10 +121,10 @@ Motion should feel **slow, smooth and precise**, like an architect's pen, never 
 Navigation: **Κτίρια / Buildings · Η Εταιρεία / Company · Τοποθεσία / Location · Επικοινωνία / Contact**, plus the EL/EN switch and a "Επικοινωνία / Contact" button.
 
 ### 1. Home / Αρχική
-1. **Hero:** large display headline, e.g. «Εμπορικά κτίρια στο Χαλάνδρι.» / "Commercial buildings in Chalandri.", one line of subtext: three standalone buildings, each leased as a whole, directly from the owning company. Primary CTA "Δείτε τα κτίρια" and a secondary text link "Επικοινωνία". The animated 3-building drawing.
-2. **Key numbers** in a hairline-divided row: 3 buildings · since 2018 · [total m²] · 100% leased (show this last one only while it is true; it reads from the data).
-3. **01 — The buildings:** three columns/rows, one per building, each with its own small line drawing, label, use, floors, total m², and its status (from the data).
-4. **02 — Why us (Ink dark section):** 3–4 short points: direct from the owner, no middlemen · a technical company that maintains its own buildings · buildings that can be adapted to a tenant's needs · [BUILDING FEATURES, e.g. frontage, parking, visibility, access from main roads].
+1. **Hero:** large display headline, e.g. «Εμπορικά κτίρια στο Χαλάνδρι.» / "Commercial buildings in Chalandri.", one line of subtext: three standalone buildings, each leased as a whole by the owning company. Primary CTA "Δείτε τα κτίρια" and a secondary text link "Επικοινωνία". The animated 3-building drawing.
+2. **Key numbers** in a hairline-divided row: 3 buildings · since 2018 · 100% leased (show this last one only while it is true; it reads from the data).
+3. **01 — The buildings:** three columns/rows, one per building, each with its own small line drawing, label, use, floors, area (shown as —), and its status (from the data).
+4. **02 — Why us (Ink dark section):** 3–4 short points: one owner for all three buildings · a technical company that maintains its own buildings · buildings that can be adapted to a tenant's needs · [BUILDING FEATURES, e.g. frontage, parking, visibility, access from main roads].
 5. **03 — Location teaser:** abstract map-style drawing of the area with the address and a link to Location.
 6. **Closing CTA:** a big, calm statement («Ενδιαφέρεστε για ένα κτίριο;» / "Interested in a building?") inviting an expression of interest for future availability, with the contact button, phone and email.
 
@@ -131,7 +132,7 @@ Navigation: **Κτίρια / Buildings · Η Εταιρεία / Company · Το�
 - Intro line explaining that each building is leased **as a whole** to a single tenant.
 - **One editorial block per building** (anchor `#ktirio-a`, `#ktirio-b`, `#ktirio-g`): its own abstract elevation drawing, label, address, use, plot area, building area, floors, frontage, parking, key features, and status.
 - Then **a refined summary table** of the three buildings with columns:
-  `Κτίριο / Building` · `Χρήση / Use` · `Όροφοι / Floors` · `Εμβαδόν / Area (m²)` · `Οικόπεδο / Plot (m²)` · `Κατάσταση / Status` (Leased / Available / Available from [date]) · action
+  `Κτίριο / Building` · `Χρήση / Use` · `Όροφοι / Floors` · `Εμβαδόν / Area` (—) · `Οικόπεδο / Plot` (—) · `Κατάσταση / Status` (Leased / Available / Available from [date]) · action
 - Table styling: no zebra stripes or heavy borders; hairline rows, tabular figures, numbers right-aligned, generous row height, small uppercase column headers, a dot indicator for status (accent = available, graphite = available from a date, light = leased).
 - Each row has an **"Ενδιαφέρομαι / I'm interested →"** button that opens the contact page with the building pre-filled (`/epikoinonia?ktirio=b`), also for leased buildings (interest in future availability).
 - **Mobile:** each row becomes a stacked block with label/value pairs, with no horizontal scrolling.
@@ -222,9 +223,8 @@ Navigation: **Κτίρια / Buildings · Η Εταιρεία / Company · Το�
 | `[HOURS]` | Office hours |
 | `[GEMI_NUMBER]`, `[VAT_NUMBER]`, `[TAX_OFFICE]` | Company legal details (ΓΕΜΗ, ΑΦΜ, ΔΟΥ) |
 | `[ANALYTICS]` | Plausible or Umami account |
-| `[total m²]` | Total area of the three buildings |
 | `[BUILDING FEATURES]` | Frontage, parking, visibility, access, energy class, etc. |
-| Buildings | For each of the 3 buildings: label, address, use, floors, building and plot m², features, status and lease end date if it should be shown |
+| Buildings | For each of the 3 buildings: label, address, use, floors, features, status and lease end date if it should be shown |
 | Company text & milestones | Confirm or edit the "About" text and the timeline |
 | Location details | Nearest metro/bus, parking options, travel times |
 | Domain | The domain the site will use |

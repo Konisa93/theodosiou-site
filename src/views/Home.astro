@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import BuildingsDrawing from '../components/BuildingsDrawing.astro';
 import BuildingElevation from '../components/BuildingElevation.astro';
 import AreaMap from '../components/AreaMap.astro';
-import { buildings, fmt, totalArea, leasedCount, allLeased, statusLabel, statusClass, COMPANY } from '../lib/buildings';
+import { buildings, areaLabel, leasedCount, allLeased, statusLabel, statusClass, COMPANY } from '../lib/buildings';
 import { path, type Lang } from '../i18n/ui';
 
 interface Props { lang: Lang; }
@@ -12,23 +12,23 @@ const { lang } = Astro.props;
 const copy = {
   el: {
     title: 'Θεοδοσίου Τεχνική Α.Ε. · Εμπορικά κτίρια στο Χαλάνδρι',
-    description: 'Τρία αυτοτελή εμπορικά κτίρια στο Χαλάνδρι, που μισθώνονται ολόκληρα, απευθείας από την ιδιοκτήτρια εταιρεία.',
+    description: 'Τρία αυτοτελή εμπορικά κτίρια στο Χαλάνδρι, που μισθώνονται ολόκληρα από την ιδιοκτήτρια εταιρεία.',
     place: 'Χαλάνδρι · Αθήνα',
     hero: ['Εμπορικά', 'κτίρια στο', 'Χαλάνδρι.'],
-    lead: 'Τρία αυτοτελή κτίρια, που μισθώνονται ολόκληρα, απευθείας από την ιδιοκτήτρια εταιρεία.',
+    lead: 'Τρία αυτοτελή κτίρια, που μισθώνονται ολόκληρα από την ιδιοκτήτρια εταιρεία.',
     seeBuildings: 'Δείτε τα κτίρια',
     contact: 'Επικοινωνία',
     numbersLabel: 'Βασικά στοιχεία',
-    nBuildings: 'Κτίρια', since: 'Από το', totalArea: 'Συνολικά m²', leased: 'Μισθωμένα', available: 'Διαθέσιμα',
+    nBuildings: 'Κτίρια', since: 'Από το', leased: 'Μισθωμένα', available: 'Διαθέσιμα',
     bEyebrow: 'Τα κτίρια',
     bTitle: 'Τρία κτίρια. Ένας ιδιοκτήτης.',
     bText: 'Κάθε κτίριο μισθώνεται ολόκληρο σε έναν μισθωτή. Ιδανικά για εταιρείες λιανικής, εκθέσεις και επιχειρήσεις που θέλουν δική τους, αυτοτελή παρουσία.',
     floors: 'Όροφοι', area: 'Εμβαδόν', status: 'Κατάσταση', details: 'Λεπτομέρειες',
-    sample: 'Δείγμα στοιχείων: εμβαδά και όροφοι θα αντικατασταθούν με τα πραγματικά.',
+    sample: 'Δείγμα στοιχείων: οι όροφοι θα αντικατασταθούν με τα πραγματικά.',
     whyEyebrow: 'Γιατί εμάς',
-    whyTitle: 'Χωρίς μεσάζοντες. Με τεχνική γνώση.',
+    whyTitle: 'Τεχνική γνώση. Προσεγμένα κτίρια.',
     reasons: [
-      { title: 'Απευθείας από τον ιδιοκτήτη', text: 'Μιλάτε κατευθείαν με την εταιρεία που κατέχει τα κτίρια, χωρίς μεσάζοντες.' },
+      { title: 'Ένας ιδιοκτήτης, τρία κτίρια', text: 'Η ίδια εταιρεία κατέχει και διαχειρίζεται και τα τρία κτίρια, με σταθερή φροντίδα και ένα σημείο επαφής.' },
       { title: 'Τεχνική εμπειρία', text: 'Ως τεχνική κατασκευαστική εταιρεία φροντίζουμε τη συντήρηση των κτιρίων μας με συνέπεια.' },
       { title: 'Προσαρμογή στις ανάγκες σας', text: 'Μελετάμε μαζί σας τις αλλαγές που χρειάζεται η επιχείρησή σας. [ΝΑ ΕΠΙΒΕΒΑΙΩΘΕΙ]' },
       { title: 'Αυτοτελή κτίρια', text: 'Κάθε κτίριο μισθώνεται ολόκληρο, σε έναν μισθωτή. [ΧΑΡΑΚΤΗΡΙΣΤΙΚΑ: πρόσοψη, στάθμευση, πρόσβαση]' },
@@ -45,23 +45,23 @@ const copy = {
   },
   en: {
     title: 'Theodosiou Texniki AE · Commercial buildings in Chalandri',
-    description: 'Three standalone commercial buildings in Chalandri, Athens, each leased as a whole, directly from the owning company.',
+    description: 'Three standalone commercial buildings in Chalandri, Athens, each leased as a whole by the owning company.',
     place: 'Chalandri · Athens',
     hero: ['Commercial', 'buildings in', 'Chalandri.'],
-    lead: 'Three standalone buildings, each leased as a whole, directly from the owning company.',
+    lead: 'Three standalone buildings, each leased as a whole by the owning company.',
     seeBuildings: 'View the buildings',
     contact: 'Contact',
     numbersLabel: 'Key figures',
-    nBuildings: 'Buildings', since: 'Since', totalArea: 'Total m²', leased: 'Leased', available: 'Available',
+    nBuildings: 'Buildings', since: 'Since', leased: 'Leased', available: 'Available',
     bEyebrow: 'The buildings',
     bTitle: 'Three buildings. One owner.',
     bText: 'Each building is leased as a whole to a single tenant. Suited to retail companies, showrooms and businesses that want a standalone presence of their own.',
     floors: 'Floors', area: 'Area', status: 'Status', details: 'Details',
-    sample: 'Sample figures: areas and floors will be replaced with the real ones.',
+    sample: 'Sample figures: floors will be replaced with the real ones.',
     whyEyebrow: 'Why us',
-    whyTitle: 'No middlemen. Real technical know-how.',
+    whyTitle: 'Technical know-how. Well-kept buildings.',
     reasons: [
-      { title: 'Directly from the owner', text: 'You deal directly with the company that owns the buildings, with no agents in between.' },
+      { title: 'One owner, three buildings', text: 'The same company owns and manages all three buildings, with consistent care and a single point of contact.' },
       { title: 'Technical experience', text: 'As a technical and construction company, we look after the upkeep of our buildings consistently.' },
       { title: 'Adapted to your needs', text: 'We work with you on the changes your business needs. [TO CONFIRM]' },
       { title: 'Standalone buildings', text: 'Each building is leased as a whole, to a single tenant. [FEATURES: frontage, parking, access]' },
@@ -101,7 +101,6 @@ const copy = {
     <dl class="numbers" data-reveal-group>
       <div data-reveal><dt class="t-label muted">{copy.nBuildings}</dt><dd class="t-h1 num">{buildings.length}</dd></div>
       <div data-reveal><dt class="t-label muted">{copy.since}</dt><dd class="t-h1 num">2018</dd></div>
-      <div data-reveal><dt class="t-label muted">{copy.totalArea}</dt><dd class="t-h1 num" data-count={totalArea}>{fmt(totalArea, lang)}</dd></div>
       {allLeased
         ? <div data-reveal><dt class="t-label muted">{copy.leased}</dt><dd class="t-h1 num"><span data-count="100">100</span>%</dd></div>
         : <div data-reveal><dt class="t-label muted">{copy.available}</dt><dd class="t-h1 num">{buildings.length - leasedCount}</dd></div>}
@@ -132,7 +131,7 @@ const copy = {
               </div>
               <dl class="building__facts">
                 <div><dt class="t-label muted">{copy.floors}</dt><dd class="num">{b.floors}</dd></div>
-                <div><dt class="t-label muted">{copy.area}</dt><dd class="num">{fmt(b.area, lang)} m²</dd></div>
+                <div><dt class="t-label muted">{copy.area}</dt><dd class="num">{areaLabel(b.area, lang)}</dd></div>
                 <div><dt class="t-label muted">{copy.status}</dt><dd><span class:list={['status', statusClass(b)]}>{statusLabel(b, lang)}</span></dd></div>
               </dl>
               <span class="text-cta">{copy.details} <span class="btn__arrow" aria-hidden="true">→</span></span>
@@ -212,7 +211,7 @@ const copy = {
 
   /* Numbers */
   .numbers-wrap { padding-bottom: var(--s-6); }
-  .numbers { display: grid; grid-template-columns: repeat(4, 1fr); padding-block: var(--s-7); }
+  .numbers { display: grid; grid-template-columns: repeat(3, 1fr); padding-block: var(--s-7); }
   .numbers > div { display: grid; gap: var(--s-3); padding-right: var(--s-5); }
   .numbers > div + div { border-left: 1px solid var(--hairline); padding-left: var(--s-6); }
 

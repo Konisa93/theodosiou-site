@@ -7,7 +7,8 @@ export const buildings: Building[] = data.buildings;
 
 export const fmt = (n: number, lang: Lang = 'el') => n.toLocaleString(locale(lang));
 
-export const totalArea = buildings.reduce((sum, b) => sum + b.area, 0);
+// Square metres are not published: a null area shows a dash.
+export const areaLabel = (n: number | null, lang: Lang = 'el') => (n == null ? '—' : `${fmt(n, lang)} m²`);
 export const leasedCount = buildings.filter((b) => b.status === 'leased').length;
 export const allLeased = leasedCount === buildings.length;
 

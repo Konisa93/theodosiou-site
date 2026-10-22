@@ -5,6 +5,8 @@ Bilingual (Greek / English) website for **ΘΕΟΔΟΣΙΟΥ ΤΕΧΝΙΚΗ Α.�
 Built with [Astro](https://astro.build) as a static site. It has no database, no server and no outside services: everything runs on **GitHub**. GitHub stores the code, builds the site automatically and hosts it on **GitHub Pages**.
 
 > **Confidentiality rule:** the current tenants of the buildings must **never** appear anywhere on the site. That covers text, data, image descriptions and code comments. The data file deliberately has no tenant field.
+>
+> **Wording rule:** leasing may go through agents, so the site never says "no agents", "no middlemen" or "directly from the owner".
 
 ---
 
@@ -52,7 +54,7 @@ Open `src/data/buildings.json`, find the building (`"id": "a"`, `"b"` or `"g"`) 
 The home page figures update by themselves. For example, "100% Leased" turns into "Available" when a building frees up.
 
 ### Change a building's details
-In the same file, edit `area` and `plot` (in m², numbers only), `floors`, `address`, `use` and `features`. Every text field has an `el` and an `en` version, so **always update both**.
+In the same file, edit `floors`, `address`, `use` and `features`. `area` and `plot` are set to `null`, because the client prefers not to publish square metres, so the site shows **—** instead. If that changes, enter numbers (in m²) and they appear automatically, e.g. *1.250 m²*. Every text field has an `el` and an `en` version, so **always update both**.
 
 `shape` only controls the abstract drawing (its width, height and number of floor lines). It is not real data.
 
@@ -109,7 +111,7 @@ The one limitation: a visitor with no email app set up (for example on a shared 
 
 ### Launch checklist
 - [ ] Replace every `[PLACEHOLDER]` in square brackets (search the project for `[`).
-- [ ] Fill in the real building data in `src/data/buildings.json`, and remove the "sample figures" notes in `src/views/Home.astro` and `src/views/Buildings.astro`.
+- [ ] Fill in the real building data in `src/data/buildings.json` (leave `area` and `plot` as `null`), and remove the "sample figures" notes in `src/views/Home.astro` and `src/views/Buildings.astro`.
 - [ ] Set the real phone, **email** (the form sends to it), postcode, office hours, ΓΕΜΗ, ΑΦΜ and ΔΟΥ.
 - [ ] Set the building coordinates in `src/views/Location.astro` and `src/lib/schema.ts`.
 - [ ] Have the privacy policy (`src/views/Privacy.astro`) reviewed by the client's legal advisor.
