@@ -100,14 +100,28 @@ The one limitation: a visitor with no email app set up (for example on a shared 
 3. Go to **Actions** and wait for **Deploy to GitHub Pages** to finish. It also runs on every push.
 4. The site is live at `https://<username>.github.io/theodosiou-site`. All links and images adapt to this sub-folder automatically.
 
-### Connect the client's domain
-1. Create the file `public/CNAME` containing only the domain, e.g. `www.example.gr`. Commit and push.
-2. In **Settings → Pages → Custom domain**, enter the same `www.` domain and save.
-3. At the domain registrar, add these DNS records:
-   - `CNAME` record: `www` → `<username>.github.io`
-   - `A` records for the bare domain → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`. GitHub then redirects the bare domain to `www`.
-4. When GitHub shows the certificate is ready, tick **Enforce HTTPS**.
-5. Push any change (or run the workflow from **Actions → Run workflow**). The build picks up the new domain for canonical links, the sitemap and share images.
+### The domain: www.theodosiouae.com
+The site's address is **https://www.theodosiouae.com**. The domain is registered at **Papaki**, which also runs its DNS and the company's **email**.
+
+- `public/CNAME` contains `www.theodosiouae.com`.
+- In GitHub, **Settings → Pages → Custom domain** is set to `www.theodosiouae.com`.
+
+DNS records at Papaki (**Papaki → My domains → theodosiouae.com → DNS management**):
+
+| Type | Name / Host | Value | Action |
+|---|---|---|---|
+| `A` | `@` (theodosiouae.com) | `195.110.124.140` | **Delete** (old Papaki server) |
+| `A` | `@` | `185.199.108.153` | Add |
+| `A` | `@` | `185.199.109.153` | Add |
+| `A` | `@` | `185.199.110.153` | Add |
+| `A` | `@` | `185.199.111.153` | Add |
+| `CNAME` | `www` | `konisa93.github.io` | **Change** (was `theodosiouae.com`) |
+
+**Do not touch** the `MX` record (`mail-gr.securemail.pro`) or any `TXT` records. They run the company's email.
+
+After the records update (usually within an hour, at most 24–48 hours), GitHub issues the HTTPS certificate automatically. Then tick **Enforce HTTPS** under Settings → Pages. The bare domain `theodosiouae.com` redirects to `www` automatically.
+
+To protect the domain from being claimed by another GitHub account, verify it once: **GitHub → your profile → Settings → Pages → Add a domain**. GitHub gives you a `TXT` record to add at Papaki.
 
 ### Launch checklist
 - [ ] Replace every `[PLACEHOLDER]` in square brackets (search the project for `[`).
@@ -116,11 +130,11 @@ The one limitation: a visitor with no email app set up (for example on a shared 
 - [ ] Set the building coordinates in `src/views/Location.astro` and `src/lib/schema.ts`.
 - [ ] Have the privacy policy (`src/views/Privacy.astro`) reviewed by the client's legal advisor.
 - [ ] Have a native speaker check the English copy.
-- [ ] Connect the custom domain (above).
-- [ ] In `site.config.mjs`, set `SITE_URL` to the real `https://www.` address and `PRELAUNCH = false`.
+- [ ] Update the DNS records at Papaki (above) and tick **Enforce HTTPS**.
+- [ ] In `site.config.mjs`, set `PRELAUNCH = false`.
 - [ ] Run `npm run images` if the name or headline changed, then commit and push.
 - [ ] Test the form in both languages on a phone and on a computer.
-- [ ] Add the site to [Google Search Console](https://search.google.com/search-console) and submit `https://www.<domain>/sitemap-index.xml`.
+- [ ] Add the site to [Google Search Console](https://search.google.com/search-console) and submit `https://www.theodosiouae.com/sitemap-index.xml`.
 - [ ] Create or claim the company's **Google Business Profile**. Use exactly the same name, address and phone as the website footer.
 - [ ] Check the share preview with the [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/) or [opengraph.xyz](https://www.opengraph.xyz).
 
