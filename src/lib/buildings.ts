@@ -31,8 +31,10 @@ export const COMPANY = {
   phone: '+30 210 XXX XXXX', // [PHONE]
   phoneHref: 'tel:+30210XXXXXXX',
   email: 'info@example.gr', // [EMAIL]
-  address: { el: 'Πλάτωνος 11, Χαλάνδρι', en: 'Platonos 11, Chalandri' },
-  postcode: { el: '[ΤΚ]', en: '[POSTCODE], Athens, Greece' },
+  // Where the buildings are. The registered office's street address is deliberately not published.
+  area: { el: 'Κέντρο Χαλανδρίου', en: 'Central Chalandri' },
+  // Statutory seat (έδρα) of the Α.Ε. is the municipality, required in the legal notice.
+  seat: { el: 'Χαλάνδρι Αττικής', en: 'Chalandri, Attica' },
   hours: {
     el: 'Δευτέρα – Παρασκευή, 09:00 – 17:00 [ΝΑ ΕΠΙΒΕΒΑΙΩΘΕΙ]',
     en: 'Monday – Friday, 09:00 – 17:00 [TO CONFIRM]',

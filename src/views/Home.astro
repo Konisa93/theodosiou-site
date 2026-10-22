@@ -171,7 +171,7 @@ const copy = {
         <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">03</span><span class="eyebrow__rule"></span>{copy.locEyebrow}</p>
         <h2 class="t-h2" id="loc-title" data-reveal>{copy.locTitle}</h2>
         <p class="t-body muted" data-reveal>{copy.locText}</p>
-        <address class="location__address t-lead" data-reveal>{COMPANY.address[lang]}</address>
+        <p class="location__address t-lead" data-reveal>{COMPANY.area[lang]}</p>
         <a class="text-cta" href={path('location', lang)} data-reveal>{copy.locLink} <span class="btn__arrow" aria-hidden="true">→</span></a>
       </div>
       <div class="location__map"><AreaMap label={copy.mapLabel} /></div>
@@ -254,7 +254,7 @@ const copy = {
   /* Location */
   .location { row-gap: var(--s-8); align-items: center; }
   .location__text { grid-column: 1 / span 5; display: grid; gap: var(--s-5); justify-items: start; }
-  .location__address { font-style: normal; color: var(--ink); margin-top: var(--s-4); }
+  .location__address { color: var(--ink); margin-top: var(--s-4); }
   .location__map { grid-column: 7 / -1; color: var(--ink); }
 
   /* Closing */

@@ -17,9 +17,7 @@ export function buildSchema({ lang, page, site }: { lang: Lang; page: RouteKey; 
 
   const address = {
     '@type': 'PostalAddress',
-    streetAddress: lang === 'el' ? 'Πλάτωνος 11' : 'Platonos 11',
     addressLocality: lang === 'el' ? 'Χαλάνδρι' : 'Chalandri',
-    postalCode: '[POSTCODE]',
     addressRegion: lang === 'el' ? 'Αττική' : 'Attica',
     addressCountry: 'GR',
   };

@@ -19,7 +19,7 @@ const year = new Date().getFullYear();
         <ul>{nav.map(([href, label]) => <li><a class="link" href={href}>{label}</a></li>)}</ul>
       </nav>
       <address class="site-footer__contact">
-        <span>{COMPANY.address[lang]}, {COMPANY.postcode[lang]}</span>
+        <span>{COMPANY.area[lang]}</span>
         <a class="link" href={COMPANY.phoneHref}>{COMPANY.phone}</a>
         <a class="link" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
       </address>
@@ -28,7 +28,7 @@ const year = new Date().getFullYear();
     <div class="site-footer__legal">
       <p lang="el">ΘΕΟΔΟΣΙΟΥ ΤΕΧΝΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ – ΑΝΑΠΤΥΞΗ ΚΑΙ ΑΞΙΟΠΟΙΗΣΗ ΑΚΙΝΗΤΩΝ ΚΑΙ ΠΑΡΟΧΗ ΥΠΗΡΕΣΙΩΝ – ΕΚΜΕΤΑΛΛΕΥΣΗ ΑΚΙΝΗΤΩΝ – ΤΕΧΝΙΚΗ ΚΑΤΑΣΚΕΥΑΣΤΙΚΗ ΕΤΑΙΡΕΙΑ</p>
       {!el && <p>Real estate development and utilisation, property services, property management, technical & construction company.</p>}
-      <p>{el ? 'ΓΕΜΗ [—] · ΑΦΜ [—] · ΔΟΥ [—]' : 'GEMI [—] · VAT [—] · Tax office [—]'}</p>
+      <p>{el ? `Έδρα: ${COMPANY.seat.el} · ΓΕΜΗ [—] · ΑΦΜ [—] · ΔΟΥ [—]` : `Registered seat: ${COMPANY.seat.en} · GEMI [—] · VAT [—] · Tax office [—]`}</p>
       <p class="site-footer__bottom">
         <span>© {year} {el ? 'Θεοδοσίου Τεχνική Α.Ε.' : 'Theodosiou Texniki AE'}</span>
         <a class="link" href={path('privacy', lang)}>{el ? 'Πολιτική Απορρήτου' : 'Privacy Policy'}</a>

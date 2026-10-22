@@ -16,7 +16,7 @@ const copy = {
     sectionLabel: 'Στοιχεία και φόρμα επικοινωνίας',
     allLeased: 'Όλα τα κτίρια είναι αυτή τη στιγμή μισθωμένα. Αφήστε μας τα στοιχεία σας και θα επικοινωνήσουμε μαζί σας όταν κάποιο διατεθεί.',
     open: 'Πείτε μας τι χρειάζεται η επιχείρησή σας και θα επικοινωνήσουμε μαζί σας.',
-    phone: 'Τηλέφωνο', email: 'Email', address: 'Διεύθυνση', hours: 'Ωράριο',
+    phone: 'Τηλέφωνο', email: 'Email', address: 'Τα κτίρια', hours: 'Ωράριο',
     name: 'Ονοματεπώνυμο *', nameErr: 'Συμπληρώστε το ονοματεπώνυμό σας.',
     company: 'Εταιρεία *', companyErr: 'Συμπληρώστε την εταιρεία σας.',
     emailField: 'Email *', emailErr: 'Συμπληρώστε ένα έγκυρο email.',
@@ -41,7 +41,7 @@ const copy = {
     sectionLabel: 'Contact details and form',
     allLeased: "All buildings are currently leased. Leave us your details and we'll contact you when one becomes available.",
     open: "Tell us what your business needs and we'll get back to you.",
-    phone: 'Phone', email: 'Email', address: 'Address', hours: 'Office hours',
+    phone: 'Phone', email: 'Email', address: 'The buildings', hours: 'Office hours',
     name: 'Full name *', nameErr: 'Please enter your full name.',
     company: 'Company *', companyErr: 'Please enter your company.',
     emailField: 'Email *', emailErr: 'Please enter a valid email address.',
@@ -70,7 +70,7 @@ const copy = {
         <dl class="contact__list" data-reveal-group>
           <div data-reveal><dt class="t-label muted">{copy.phone}</dt><dd><a class="link" href={COMPANY.phoneHref}>{COMPANY.phone}</a></dd></div>
           <div data-reveal><dt class="t-label muted">{copy.email}</dt><dd><a class="link" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></dd></div>
-          <div data-reveal><dt class="t-label muted">{copy.address}</dt><dd>{COMPANY.address[lang]}, {COMPANY.postcode[lang]}</dd></div>
+          <div data-reveal><dt class="t-label muted">{copy.address}</dt><dd>{COMPANY.area[lang]}</dd></div>
           <div data-reveal><dt class="t-label muted">{copy.hours}</dt><dd>{COMPANY.hours[lang]}</dd></div>
         </dl>
       </div>

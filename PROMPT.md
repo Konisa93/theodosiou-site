@@ -17,7 +17,7 @@ The design direction is **minimal luxury with professional motion**: think of an
   ΘΕΟΔΟΣΙΟΥ ΤΕΧΝΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ – ΑΝΑΠΤΥΞΗ ΚΑΙ ΑΞΙΟΠΟΙΗΣΗ ΑΚΙΝΗΤΩΝ ΚΑΙ ΠΑΡΟΧΗ ΥΠΗΡΕΣΙΩΝ – ΕΚΜΕΤΑΛΛΕΥΣΗ ΑΚΙΝΗΤΩΝ – ΤΕΧΝΙΚΗ ΚΑΤΑΣΚΕΥΑΣΤΙΚΗ ΕΤΑΙΡΕΙΑ
   English: Real estate development and utilisation, property services, property management, technical & construction company.
 - **Founded:** 2018
-- **Address:** Πλάτωνος 11, Χαλάνδρι [ΤΚ] / Platonos 11, Chalandri [POSTCODE], Athens, Greece
+- **Location:** the buildings are in the centre of Chalandri. Show «Κέντρο Χαλανδρίου» / "Central Chalandri", never a street address. The registered office (Πλάτωνος 11) is not published; the legal notice shows only the statutory seat: «Έδρα: Χαλάνδρι Αττικής».
 - **Phone:** [PHONE]
 - **Email:** [EMAIL] (inquiry form sends here)
 - **Legal details for the footer (required for an Α.Ε. in Greece):** ΓΕΜΗ [GEMI_NUMBER], ΑΦΜ [VAT_NUMBER], ΔΟΥ [TAX_OFFICE]
@@ -217,7 +217,6 @@ Navigation: **Κτίρια / Buildings · Η Εταιρεία / Company · Το�
 
 | Placeholder | What it is |
 |---|---|
-| `[ΤΚ] / [POSTCODE]` | Postcode for Platonos 11, Chalandri |
 | `[PHONE]` | Company phone |
 | `[EMAIL]` | Email that receives inquiries |
 | `[HOURS]` | Office hours |

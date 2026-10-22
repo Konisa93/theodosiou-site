@@ -13,9 +13,7 @@ const lat = 38.0213;
 const lon = 23.7987;
 const d = 0.006;
 const osmEmbed = `https://www.openstreetmap.org/export/embed.html?bbox=${lon - d}%2C${lat - d / 2}%2C${lon + d}%2C${lat + d / 2}&layer=mapnik&marker=${lat}%2C${lon}`;
-const query = encodeURIComponent(`${COMPANY.address.el}, Ελλάδα`);
-const googleMaps = `https://www.google.com/maps/search/?api=1&query=${query}`;
-const directions = `https://www.google.com/maps/dir/?api=1&destination=${query}`;
+const googleMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('Χαλάνδρι, Ελλάδα')}`;
 
 const copy = {
   el: {
@@ -23,10 +21,9 @@ const copy = {
     description: 'Τα κτίρια της Θεοδοσίου Τεχνική Α.Ε. βρίσκονται στο Χαλάνδρι. Διεύθυνση, χάρτης και πρόσβαση.',
     eyebrow: 'Τοποθεσία',
     lines: ['Στην καρδιά', 'του Χαλανδρίου.'],
-    mapTitle: 'Διεύθυνση και χάρτης',
-    addressLabel: 'Διεύθυνση',
-    openMaps: 'Άνοιγμα στο Google Maps',
-    directions: 'Οδηγίες διαδρομής',
+    mapTitle: 'Περιοχή και χάρτης',
+    addressLabel: 'Περιοχή',
+    openMaps: 'Το Χαλάνδρι στο Google Maps',
     loadMap: 'Εμφάνιση χάρτη',
     mapHint: 'Ο χάρτης φορτώνει από το OpenStreetMap μόνο όταν τον ζητήσετε.',
     iframeTitle: 'Χάρτης: Χαλάνδρι',
@@ -45,10 +42,9 @@ const copy = {
     description: 'The buildings of Theodosiou Texniki AE are in Chalandri, Athens. Address, map and access.',
     eyebrow: 'Location',
     lines: ['In the heart', 'of Chalandri.'],
-    mapTitle: 'Address and map',
-    addressLabel: 'Address',
-    openMaps: 'Open in Google Maps',
-    directions: 'Get directions',
+    mapTitle: 'Area and map',
+    addressLabel: 'Area',
+    openMaps: 'Chalandri on Google Maps',
     loadMap: 'Show map',
     mapHint: 'The map loads from OpenStreetMap only when you ask for it.',
     iframeTitle: 'Map: Chalandri',
@@ -72,10 +68,9 @@ const copy = {
       <div class="loc__text">
         <h2 class="visually-hidden" id="map-title">{copy.mapTitle}</h2>
         <p class="t-label muted" data-reveal>{copy.addressLabel}</p>
-        <address class="t-h3" data-reveal>{COMPANY.address[lang]}<br />{COMPANY.postcode[lang]}</address>
+        <p class="t-h3" data-reveal>{COMPANY.area[lang]}<br />{COMPANY.seat[lang]}</p>
         <div class="loc__links" data-reveal>
           <a class="text-cta" href={googleMaps} target="_blank" rel="noopener">{copy.openMaps} <span class="btn__arrow" aria-hidden="true">↗</span></a>
-          <a class="text-cta" href={directions} target="_blank" rel="noopener">{copy.directions} <span class="btn__arrow" aria-hidden="true">↗</span></a>
         </div>
       </div>
 
@@ -126,7 +121,6 @@ const copy = {
 <style>
   .location .grid { row-gap: var(--s-8); align-items: start; }
   .loc__text { grid-column: 1 / span 4; display: grid; gap: var(--s-5); justify-items: start; }
-  .loc__text address { font-style: normal; }
   .loc__links { display: grid; gap: var(--s-4); margin-top: var(--s-4); }
   .loc__map { grid-column: 6 / -1; position: relative; aspect-ratio: 4 / 3; background: var(--stone); }
   .loc__placeholder { position: absolute; inset: 0; display: grid; place-items: center; padding: var(--s-6); }
