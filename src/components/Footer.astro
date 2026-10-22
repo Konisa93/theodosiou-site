@@ -1,0 +1,55 @@
+---
+import Logo from './Logo.astro';
+import { navItems, contactLabel, path, type Lang } from '../i18n/ui';
+import { COMPANY } from '../lib/buildings';
+
+interface Props { lang?: Lang; }
+const { lang = 'el' } = Astro.props;
+const el = lang === 'el';
+const nav = [...navItems(lang).map((n) => [n.href, n.label]), [path('contact', lang), contactLabel(lang)]];
+const year = new Date().getFullYear();
+---
+<footer class="site-footer section--ink">
+  <div class="wrap">
+    <div class="site-footer__top grid">
+      <div class="site-footer__brand">
+        <Logo lang={lang} size={40} accent />
+      </div>
+      <nav class="site-footer__nav" aria-label={el ? 'Υποσέλιδο' : 'Footer'}>
+        <ul>{nav.map(([href, label]) => <li><a class="link" href={href}>{label}</a></li>)}</ul>
+      </nav>
+      <address class="site-footer__contact">
+        <span>{COMPANY.address[lang]}, {COMPANY.postcode[lang]}</span>
+        <a class="link" href={COMPANY.phoneHref}>{COMPANY.phone}</a>
+        <a class="link" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
+      </address>
+    </div>
+    <hr class="rule" />
+    <div class="site-footer__legal">
+      <p lang="el">ΘΕΟΔΟΣΙΟΥ ΤΕΧΝΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ – ΑΝΑΠΤΥΞΗ ΚΑΙ ΑΞΙΟΠΟΙΗΣΗ ΑΚΙΝΗΤΩΝ ΚΑΙ ΠΑΡΟΧΗ ΥΠΗΡΕΣΙΩΝ – ΕΚΜΕΤΑΛΛΕΥΣΗ ΑΚΙΝΗΤΩΝ – ΤΕΧΝΙΚΗ ΚΑΤΑΣΚΕΥΑΣΤΙΚΗ ΕΤΑΙΡΕΙΑ</p>
+      {!el && <p>Real estate development and utilisation, property services, property management, technical & construction company.</p>}
+      <p>{el ? 'ΓΕΜΗ [—] · ΑΦΜ [—] · ΔΟΥ [—]' : 'GEMI [—] · VAT [—] · Tax office [—]'}</p>
+      <p class="site-footer__bottom">
+        <span>© {year} {el ? 'Θεοδοσίου Τεχνική Α.Ε.' : 'Theodosiou Texniki AE'}</span>
+        <a class="link" href={path('privacy', lang)}>{el ? 'Πολιτική Απορρήτου' : 'Privacy Policy'}</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--ink); color: var(--paper); padding-block: var(--s-10) var(--s-7); }
+  .site-footer__top { row-gap: var(--s-7); padding-bottom: var(--s-9); }
+  .site-footer__brand { grid-column: 1 / span 5; }
+  .site-footer__nav { grid-column: 7 / span 2; }
+  .site-footer__nav ul { list-style: none; padding: 0; display: grid; gap: var(--s-3); }
+  .site-footer__contact { grid-column: 10 / span 3; font-style: normal; display: grid; gap: var(--s-3); align-content: start; color: var(--paper-muted); }
+  .site-footer__contact a { color: var(--paper); justify-self: start; }
+  .site-footer__legal { padding-top: var(--s-6); display: grid; gap: var(--s-2); font-size: var(--fs-label); letter-spacing: 0.04em; color: var(--paper-muted); }
+  .site-footer__legal p { max-width: 70em; }
+  .site-footer__bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-4); margin-top: var(--s-5); }
+
+  @media (max-width: 960px) {
+    .site-footer__brand, .site-footer__nav, .site-footer__contact { grid-column: 1 / -1; }
+  }
+</style>

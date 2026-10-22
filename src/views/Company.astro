@@ -1,0 +1,174 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+import Icon from '../components/Icon.astro';
+import { path, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+
+const icons = ['develop', 'lease', 'services', 'build'] as const;
+
+const copy = {
+  el: {
+    title: 'Η Εταιρεία · Θεοδοσίου Τεχνική Α.Ε.',
+    description: 'Η Θεοδοσίου Τεχνική Α.Ε. είναι τεχνική κατασκευαστική εταιρεία που κατέχει και διαχειρίζεται τρία εμπορικά κτίρια στο Χαλάνδρι.',
+    eyebrow: 'Η Εταιρεία',
+    lines: ['Τεχνική γνώση,', 'άμεση σχέση.'],
+    lead: 'Η Θεοδοσίου Τεχνική Α.Ε. είναι τεχνική κατασκευαστική εταιρεία που κατέχει και διαχειρίζεται τρία εμπορικά κτίρια στο Χαλάνδρι.',
+    aboutEyebrow: 'Ποιοι είμαστε',
+    aboutTitle: 'Από το 2018.',
+    aboutLead: 'Τα τρία κτίρια μεταφέρθηκαν στην εταιρεία το 2018. Από τότε τα διαχειριζόμαστε με έναν απλό στόχο: κτίρια σε άριστη κατάσταση και μια σχέση εμπιστοσύνης με κάθε μισθωτή.',
+    aboutBody: 'Κάθε κτίριο μισθώνεται ολόκληρο σε μία επιχείρηση, χωρίς μεσάζοντες. Ως τεχνική εταιρεία γνωρίζουμε τα κτίρια σε βάθος, φροντίζουμε τη συντήρησή τους και συζητάμε μαζί με τον μισθωτή κάθε αλλαγή που χρειάζεται. [ΚΕΙΜΕΝΟ ΠΡΟΣ ΕΠΙΒΕΒΑΙΩΣΗ]',
+    actEyebrow: 'Δραστηριότητες',
+    actTitle: 'Τι κάνουμε.',
+    activities: [
+      { title: 'Ανάπτυξη & αξιοποίηση ακινήτων', text: 'Αξιοποιούμε τα ακίνητά μας με μακροπρόθεσμο ορίζοντα και σεβασμό στην περιοχή.' },
+      { title: 'Εκμετάλλευση & διαχείριση ακινήτων', text: 'Μισθώνουμε και διαχειριζόμαστε απευθείας τα τρία εμπορικά μας κτίρια στο Χαλάνδρι.' },
+      { title: 'Παροχή υπηρεσιών', text: 'Υποστηρίζουμε τους μισθωτές μας σε ό,τι αφορά τη λειτουργία και τη φροντίδα του κτιρίου.' },
+      { title: 'Τεχνικά & κατασκευαστικά έργα', text: 'Η τεχνική μας εμπειρία εξασφαλίζει σωστή συντήρηση και δυνατότητα προσαρμογής των χώρων.' },
+    ],
+    timeEyebrow: 'Πορεία',
+    timeTitle: 'Η διαδρομή μας.',
+    timeline: [
+      { year: '2018', text: 'Ίδρυση της εταιρείας και μεταφορά των τριών κτιρίων σε αυτήν.' },
+      { year: '[ΕΤΟΣ]', text: '[ΟΡΟΣΗΜΟ: π.χ. ανακαίνιση ή αναβάθμιση κτιρίου]' },
+      { year: 'Σήμερα', text: 'Τρία εμπορικά κτίρια, όλα μισθωμένα ολόκληρα.' },
+    ],
+    ctaTitle: 'Θέλετε να γνωριστούμε;',
+    ctaButton: 'Επικοινωνία',
+  },
+  en: {
+    title: 'Company · Theodosiou Texniki AE',
+    description: 'Theodosiou Texniki AE is a technical and construction company that owns and manages three commercial buildings in Chalandri, Athens.',
+    eyebrow: 'Company',
+    lines: ['Technical know-how,', 'a direct relationship.'],
+    lead: 'Theodosiou Texniki AE is a technical and construction company that owns and manages three commercial buildings in Chalandri, Athens.',
+    aboutEyebrow: 'Who we are',
+    aboutTitle: 'Since 2018.',
+    aboutLead: 'The three buildings were transferred to the company in 2018. Since then we have managed them with one simple aim: buildings in excellent condition and a relationship of trust with every tenant.',
+    aboutBody: 'Each building is leased as a whole to a single business, with no middlemen. As a technical company we know our buildings in depth, look after their upkeep and discuss every change a tenant needs with them directly. [TEXT TO CONFIRM]',
+    actEyebrow: 'Activities',
+    actTitle: 'What we do.',
+    activities: [
+      { title: 'Real estate development & utilisation', text: 'We manage our properties with a long-term view and respect for the area.' },
+      { title: 'Property leasing & management', text: 'We lease and manage our three commercial buildings in Chalandri directly.' },
+      { title: 'Property services', text: 'We support our tenants in everything related to running and looking after the building.' },
+      { title: 'Technical & construction works', text: 'Our technical experience ensures proper maintenance and the ability to adapt the spaces.' },
+    ],
+    timeEyebrow: 'Timeline',
+    timeTitle: 'Our journey.',
+    timeline: [
+      { year: '2018', text: 'The company is founded and the three buildings are transferred to it.' },
+      { year: '[YEAR]', text: '[MILESTONE: e.g. renovation or upgrade of a building]' },
+      { year: 'Today', text: 'Three commercial buildings, all leased as a whole.' },
+    ],
+    ctaTitle: 'Would you like to meet?',
+    ctaButton: 'Contact',
+  },
+}[lang];
+---
+<Base title={copy.title} description={copy.description} lang={lang} page="company">
+  <PageIntro eyebrow={copy.eyebrow} lines={copy.lines} lead={copy.lead} />
+
+  <!-- 01 About -->
+  <section class="section" aria-labelledby="about-title">
+    <div class="wrap grid about">
+      <div class="about__head">
+        <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">01</span><span class="eyebrow__rule"></span>{copy.aboutEyebrow}</p>
+        <h2 class="t-h2" id="about-title" data-reveal>{copy.aboutTitle}</h2>
+      </div>
+      <div class="about__body" data-reveal-group>
+        <p class="t-lead" data-reveal>{copy.aboutLead}</p>
+        <p class="t-body muted" data-reveal>{copy.aboutBody}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Activities -->
+  <section class="section section--ink" aria-labelledby="act-title">
+    <div class="wrap">
+      <div class="grid head">
+        <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">02</span><span class="eyebrow__rule"></span>{copy.actEyebrow}</p>
+        <h2 class="t-h2" id="act-title" data-reveal>{copy.actTitle}</h2>
+      </div>
+      <ul class="activities" data-reveal-group>
+        {copy.activities.map((a, i) => (
+          <li data-reveal>
+            <span class="activities__num t-label num">{String(i + 1).padStart(2, '0')}</span>
+            <Icon name={icons[i]} size={44} />
+            <h3 class="t-h3">{a.title}</h3>
+            <p class="t-small">{a.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 03 Timeline -->
+  <section class="section" aria-labelledby="time-title">
+    <div class="wrap">
+      <div class="grid head">
+        <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">03</span><span class="eyebrow__rule"></span>{copy.timeEyebrow}</p>
+        <h2 class="t-h2" id="time-title" data-reveal>{copy.timeTitle}</h2>
+      </div>
+      <div class="timeline">
+        <span class="timeline__line rule" data-rule aria-hidden="true"></span>
+        <ol class="timeline__items" data-reveal-group>
+          {copy.timeline.map((t) => (
+            <li data-reveal>
+              <span class="timeline__dot" aria-hidden="true"></span>
+              <span class="t-h3 num">{t.year}</span>
+              <p class="t-small muted">{t.text}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section section--stone">
+    <div class="wrap cta">
+      <h2 class="t-h2" data-reveal>{copy.ctaTitle}</h2>
+      <a class="btn" href={path('contact', lang)} data-reveal>{copy.ctaButton} <span class="btn__arrow" aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .about { row-gap: var(--s-7); }
+  .about__head { grid-column: 1 / span 5; display: grid; gap: var(--s-5); align-content: start; }
+  .about__body { grid-column: 7 / -1; display: grid; gap: var(--s-6); }
+
+  .head { row-gap: var(--s-5); margin-bottom: var(--s-9); }
+  .head .eyebrow { grid-column: 1 / -1; }
+  .head .t-h2 { grid-column: 1 / span 7; }
+
+  .activities { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gutter); }
+  .activities li { display: grid; gap: var(--s-5); align-content: start; padding-top: var(--s-5); border-top: 1px solid var(--ink-hairline); }
+  .activities__num { color: var(--bronze); }
+  .activities :global(.icon) { color: var(--bronze); }
+  .activities .t-small { color: var(--paper-muted); }
+
+  .timeline { position: relative; }
+  .timeline__line { position: absolute; left: 0; right: 0; top: 5px; background: var(--ink); }
+  .timeline__items { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gutter); }
+  .timeline__items li { display: grid; gap: var(--s-4); align-content: start; position: relative; }
+  .timeline__dot { width: 11px; height: 11px; border-radius: 50%; background: var(--paper); border: 1px solid var(--ink); margin-bottom: var(--s-4); }
+  .timeline__items li:first-child .timeline__dot { background: var(--bronze); border-color: var(--bronze); }
+  .timeline__items .t-small { max-width: 26em; }
+
+  .cta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--s-6); }
+
+  @media (max-width: 960px) {
+    .about__head, .about__body, .head .t-h2 { grid-column: 1 / -1; }
+    .activities { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--s-8); }
+  }
+  @media (max-width: 600px) {
+    .activities { grid-template-columns: minmax(0, 1fr); }
+    .timeline__line { top: 0; bottom: 0; left: 5px; right: auto; width: 1px; height: auto; transform-origin: top; }
+    .timeline__items { grid-template-columns: minmax(0, 1fr); row-gap: var(--s-7); padding-left: var(--s-7); }
+    .timeline__dot { position: absolute; left: calc(-1 * var(--s-7)); top: 8px; margin: 0; }
+  }
+</style>

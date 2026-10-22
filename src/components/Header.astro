@@ -1,0 +1,156 @@
+---
+import Logo from './Logo.astro';
+import { navItems, contactLabel, path, type Lang, type RouteKey } from '../i18n/ui';
+
+interface Props { lang?: Lang; page?: RouteKey; }
+const { lang = 'el', page } = Astro.props;
+
+const nav = navItems(lang);
+const contact = { key: 'contact', href: path('contact', lang), label: contactLabel(lang) };
+const home = path('home', lang);
+const menuLabel = lang === 'el' ? 'Μενού' : 'Menu';
+// The switcher keeps the visitor on the same page in the other language.
+const elHref = path(page ?? 'home', 'el');
+const enHref = path(page ?? 'home', 'en');
+---
+<header class="site-header" data-header>
+  <div class="wrap site-header__bar">
+    <a href={home} class="site-header__logo" aria-label={lang === 'el' ? 'Θεοδοσίου Τεχνική, αρχική' : 'Theodosiou Texniki, home'}>
+      <Logo lang={lang} size={28} />
+    </a>
+
+    <nav class="site-header__nav" aria-label={lang === 'el' ? 'Κύρια πλοήγηση' : 'Main navigation'}>
+      <ul>
+        {nav.map((item) => <li><a class="link-nav" href={item.href} aria-current={item.key === page ? 'page' : undefined}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <div class="lang-switch t-label" aria-label={lang === 'el' ? 'Γλώσσα' : 'Language'}>
+        <a href={elHref} hreflang="el" aria-current={lang === 'el' ? 'true' : undefined} lang="el" aria-label="Ελληνικά">ΕΛ</a>
+        <span aria-hidden="true">/</span>
+        <a href={enHref} hreflang="en" aria-current={lang === 'en' ? 'true' : undefined} lang="en" aria-label="English">EN</a>
+      </div>
+      <a href={contact.href} class="btn btn--small site-header__cta">{contact.label}</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+        <span class="visually-hidden">{menuLabel}</span>
+        <span class="menu-toggle__lines" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" data-menu hidden>
+    <nav class="wrap" aria-label={menuLabel}>
+      <ul>
+        {[...nav, contact].map((item, i) => (
+          <li style={`--i:${i}`}><a class="t-h2" href={item.href}>{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: fixed; inset: 0 0 auto; z-index: 50;
+    transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+  }
+  .site-header__bar {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--s-6);
+    height: var(--header-h);
+    transition: height var(--dur-base) var(--ease-out);
+  }
+  .site-header.is-scrolled { background: var(--paper); box-shadow: 0 1px 0 var(--hairline); }
+  .site-header.is-scrolled .site-header__bar { height: var(--header-h-compact); }
+  .site-header.is-hidden { transform: translateY(-100%); }
+
+  .site-header__nav ul { display: flex; gap: var(--s-7); list-style: none; padding: 0; }
+  .link-nav {
+    font-size: var(--fs-label); font-weight: 500; letter-spacing: var(--track-label); text-transform: uppercase;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    padding-bottom: 4px;
+    transition: background-size var(--dur-base) var(--ease-out);
+  }
+  .link-nav:hover, .link-nav[aria-current='page'] { background-size: 100% 1px; }
+
+  .site-header__actions { display: flex; align-items: center; gap: var(--s-5); }
+  .lang-switch { display: flex; gap: var(--s-2); color: var(--graphite); }
+  .lang-switch a { padding: var(--s-2) 2px; transition: color var(--dur-fast) var(--ease-out); }
+  .lang-switch a:hover, .lang-switch a[aria-current] { color: var(--ink); }
+
+  .menu-toggle {
+    display: none; width: 44px; height: 44px; margin-right: -10px;
+    background: none; border: 0; cursor: pointer; position: relative;
+  }
+  .menu-toggle__lines, .menu-toggle__lines::before {
+    position: absolute; left: 10px; right: 10px; height: 1px; background: var(--ink);
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  .menu-toggle__lines { top: 18px; }
+  .menu-toggle__lines::before { content: ''; left: 0; right: 0; top: 7px; }
+  [aria-expanded='true'] .menu-toggle__lines { transform: translateY(3.5px) rotate(45deg); }
+  [aria-expanded='true'] .menu-toggle__lines::before { transform: translateY(-7px) rotate(-90deg); }
+
+  .mobile-menu {
+    position: fixed; inset: 0; z-index: -1;
+    background: var(--paper);
+    padding-top: calc(var(--header-h-compact) + var(--s-8));
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 700ms var(--ease-in-out);
+  }
+  .mobile-menu.is-open { clip-path: inset(0); }
+  .mobile-menu ul { list-style: none; padding: 0; display: grid; gap: var(--s-4); }
+  .mobile-menu li {
+    border-bottom: 1px solid var(--hairline); padding-bottom: var(--s-4);
+    opacity: 0; transform: translateY(16px);
+    transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+    transition-delay: calc(250ms + var(--i) * var(--stagger));
+  }
+  .mobile-menu.is-open li { opacity: 1; transform: none; }
+
+  @media (max-width: 960px) {
+    .site-header__nav, .site-header__cta { display: none; }
+    .menu-toggle { display: block; }
+    .site-header__bar { height: var(--header-h-compact); gap: var(--s-4); }
+    .site-header__actions { gap: var(--s-3); }
+  }
+</style>
+
+<script>
+  function initHeader() {
+    const header = document.querySelector<HTMLElement>('[data-header]');
+    if (!header || header.dataset.ready) return;
+    header.dataset.ready = '1';
+
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      header.classList.toggle('is-scrolled', y > 80);
+      const menuOpen = header.querySelector('[data-menu]')?.classList.contains('is-open');
+      header.classList.toggle('is-hidden', !menuOpen && y > 240 && y > lastY + 2);
+      if (y < lastY - 2) header.classList.remove('is-hidden');
+      lastY = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    const toggle = header.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+    const menu = header.querySelector<HTMLElement>('[data-menu]');
+    if (!toggle || !menu) return;
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      document.documentElement.style.overflow = open ? 'hidden' : '';
+      if (open) {
+        menu.hidden = false;
+        requestAnimationFrame(() => menu.classList.add('is-open'));
+        header.classList.add('is-scrolled');
+      } else {
+        menu.classList.remove('is-open');
+        setTimeout(() => { if (!menu.classList.contains('is-open')) menu.hidden = true; }, 700);
+      }
+    };
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+  }
+  document.addEventListener('astro:page-load', initHeader);
+</script>

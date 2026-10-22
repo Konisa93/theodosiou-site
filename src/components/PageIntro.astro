@@ -1,0 +1,24 @@
+---
+// Opening block for inner pages: eyebrow, masked title lines, lead text.
+interface Props { eyebrow: string; lines: string[]; lead?: string; }
+const { eyebrow, lines, lead } = Astro.props;
+---
+<section class="intro wrap" data-hero>
+  <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">—</span><span class="eyebrow__rule"></span>{eyebrow}</p>
+  <h1 class="t-h1" data-lines style="--delay:150ms">
+    {lines.map((l) => <span class="mask"><span>{l}</span></span>)}
+  </h1>
+  {lead && <p class="t-lead" data-reveal style="--i:6">{lead}</p>}
+  <slot />
+  <hr class="rule intro__rule" data-rule />
+</section>
+
+<style>
+  .intro {
+    display: grid; gap: var(--s-6); justify-items: start;
+    padding-top: calc(var(--header-h) + var(--s-10));
+  }
+  .intro h1 { max-width: 14em; }
+  .intro__rule { width: 100%; margin-top: var(--s-8); }
+  @media (max-width: 760px) { .intro { padding-top: calc(var(--header-h-compact) + var(--s-9)); } }
+</style>

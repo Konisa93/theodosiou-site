@@ -1,0 +1,244 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+import { buildings, COMPANY, allLeased } from '../lib/buildings';
+import { path, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+
+const copy = {
+  el: {
+    title: 'Επικοινωνία · Θεοδοσίου Τεχνική Α.Ε.',
+    description: 'Επικοινωνήστε με τη Θεοδοσίου Τεχνική Α.Ε. για τα εμπορικά κτίρια στο Χαλάνδρι.',
+    eyebrow: 'Επικοινωνία',
+    lines: ['Ενδιαφέρεστε', 'για ένα κτίριο;'],
+    sectionLabel: 'Στοιχεία και φόρμα επικοινωνίας',
+    allLeased: 'Όλα τα κτίρια είναι αυτή τη στιγμή μισθωμένα. Αφήστε μας τα στοιχεία σας και θα επικοινωνήσουμε μαζί σας όταν κάποιο διατεθεί.',
+    open: 'Πείτε μας τι χρειάζεται η επιχείρησή σας και θα επικοινωνήσουμε μαζί σας.',
+    phone: 'Τηλέφωνο', email: 'Email', address: 'Διεύθυνση', hours: 'Ωράριο',
+    honeypot: 'Μην συμπληρώνετε αυτό το πεδίο',
+    name: 'Ονοματεπώνυμο *', nameErr: 'Συμπληρώστε το ονοματεπώνυμό σας.',
+    company: 'Εταιρεία *', companyErr: 'Συμπληρώστε την εταιρεία σας.',
+    emailField: 'Email *', emailErr: 'Συμπληρώστε ένα έγκυρο email.',
+    phoneField: 'Τηλέφωνο *', phoneErr: 'Συμπληρώστε ένα έγκυρο τηλέφωνο.',
+    building: 'Κτίριο ενδιαφέροντος', any: 'Οποιοδήποτε', general: 'Γενική ερώτηση',
+    use: 'Χρήση που σας ενδιαφέρει (προαιρετικό)',
+    message: 'Μήνυμα',
+    consentPre: 'Συμφωνώ με την επεξεργασία των στοιχείων μου σύμφωνα με την', consentLink: 'Πολιτική Απορρήτου',
+    consentErr: 'Χρειάζεται η συγκατάθεσή σας για να απαντήσουμε.',
+    submit: 'Αποστολή',
+    reply: 'Απαντάμε συνήθως εντός μίας εργάσιμης ημέρας.',
+    msgCheck: 'Ελέγξτε τα πεδία με σήμανση.',
+    msgSending: 'Αποστολή…',
+    msgFail: 'Η αποστολή δεν ολοκληρώθηκε. Δοκιμάστε ξανά ή καλέστε μας στο τηλέφωνο.',
+    msgAbout: 'Θα επικοινωνήσουμε μαζί σας σύντομα για το {b}.',
+    thanks: 'Ευχαριστούμε', received: 'Λάβαμε το μήνυμά σας.', soon: 'Θα επικοινωνήσουμε μαζί σας σύντομα.',
+  },
+  en: {
+    title: 'Contact · Theodosiou Texniki AE',
+    description: 'Contact Theodosiou Texniki AE about its commercial buildings in Chalandri, Athens.',
+    eyebrow: 'Contact',
+    lines: ['Interested', 'in a building?'],
+    sectionLabel: 'Contact details and form',
+    allLeased: "All buildings are currently leased. Leave us your details and we'll contact you when one becomes available.",
+    open: "Tell us what your business needs and we'll get back to you.",
+    phone: 'Phone', email: 'Email', address: 'Address', hours: 'Office hours',
+    honeypot: 'Do not fill in this field',
+    name: 'Full name *', nameErr: 'Please enter your full name.',
+    company: 'Company *', companyErr: 'Please enter your company.',
+    emailField: 'Email *', emailErr: 'Please enter a valid email address.',
+    phoneField: 'Phone *', phoneErr: 'Please enter a valid phone number.',
+    building: 'Building of interest', any: 'Any', general: 'General inquiry',
+    use: 'Intended use (optional)',
+    message: 'Message',
+    consentPre: 'I agree to the processing of my details in line with the', consentLink: 'Privacy Policy',
+    consentErr: 'We need your consent in order to reply.',
+    submit: 'Send',
+    reply: 'We usually reply within one working day.',
+    msgCheck: 'Please check the highlighted fields.',
+    msgSending: 'Sending…',
+    msgFail: "Your message couldn't be sent. Please try again or give us a call.",
+    msgAbout: "We'll be in touch soon about {b}.",
+    thanks: 'Thank you', received: 'We have received your message.', soon: "We'll be in touch soon.",
+  },
+}[lang];
+---
+<Base title={copy.title} description={copy.description} lang={lang} page="contact">
+  <PageIntro eyebrow={copy.eyebrow} lines={copy.lines} />
+
+  <section class="section contact" aria-label={copy.sectionLabel}>
+    <div class="wrap grid">
+      <div class="contact__info">
+        <p class="t-lead" data-reveal>{allLeased ? copy.allLeased : copy.open}</p>
+        <dl class="contact__list" data-reveal-group>
+          <div data-reveal><dt class="t-label muted">{copy.phone}</dt><dd><a class="link" href={COMPANY.phoneHref}>{COMPANY.phone}</a></dd></div>
+          <div data-reveal><dt class="t-label muted">{copy.email}</dt><dd><a class="link" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></dd></div>
+          <div data-reveal><dt class="t-label muted">{copy.address}</dt><dd>{COMPANY.address[lang]}, {COMPANY.postcode[lang]}</dd></div>
+          <div data-reveal><dt class="t-label muted">{copy.hours}</dt><dd>{COMPANY.hours[lang]}</dd></div>
+        </dl>
+      </div>
+
+      <div class="contact__form">
+        <form
+          name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate data-contact-form
+          data-msg-check={copy.msgCheck} data-msg-sending={copy.msgSending} data-msg-fail={copy.msgFail} data-msg-about={copy.msgAbout}
+        >
+          <input type="hidden" name="form-name" value="contact" />
+          <input type="hidden" name="language" value={lang} />
+          <p class="visually-hidden" aria-hidden="true">
+            <label>{copy.honeypot} <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+          </p>
+
+          <label class="field">
+            <input class="field__input" type="text" name="name" placeholder=" " autocomplete="name" required aria-describedby="err-name" />
+            <span class="field__label">{copy.name}</span>
+            <span class="field__line"></span>
+            <span class="field__error" id="err-name" hidden>{copy.nameErr}</span>
+          </label>
+          <label class="field">
+            <input class="field__input" type="text" name="company" placeholder=" " autocomplete="organization" required aria-describedby="err-company" />
+            <span class="field__label">{copy.company}</span>
+            <span class="field__line"></span>
+            <span class="field__error" id="err-company" hidden>{copy.companyErr}</span>
+          </label>
+          <div class="form__row">
+            <label class="field">
+              <input class="field__input" type="email" name="email" placeholder=" " autocomplete="email" required aria-describedby="err-email" />
+              <span class="field__label">{copy.emailField}</span>
+              <span class="field__line"></span>
+              <span class="field__error" id="err-email" hidden>{copy.emailErr}</span>
+            </label>
+            <label class="field">
+              <input class="field__input" type="tel" name="phone" placeholder=" " autocomplete="tel" required aria-describedby="err-phone" pattern="[0-9+()\s\-]{10,}" />
+              <span class="field__label">{copy.phoneField}</span>
+              <span class="field__line"></span>
+              <span class="field__error" id="err-phone" hidden>{copy.phoneErr}</span>
+            </label>
+          </div>
+          <label class="field field--select">
+            <select class="field__input" name="building" data-building-select>
+              {buildings.map((b) => <option value={b.id}>{b.label[lang]}</option>)}
+              <option value="any" selected>{copy.any}</option>
+              <option value="general">{copy.general}</option>
+            </select>
+            <span class="field__label">{copy.building}</span>
+            <span class="field__line"></span>
+          </label>
+          <label class="field">
+            <input class="field__input" type="text" name="use" placeholder=" " />
+            <span class="field__label">{copy.use}</span>
+            <span class="field__line"></span>
+          </label>
+          <label class="field">
+            <textarea class="field__input" name="message" placeholder=" " rows="4"></textarea>
+            <span class="field__label">{copy.message}</span>
+            <span class="field__line"></span>
+          </label>
+          <label class="check">
+            <input type="checkbox" name="consent" required aria-describedby="err-consent" />
+            <span>{copy.consentPre} <a class="link" href={path('privacy', lang)}>{copy.consentLink}</a>. *</span>
+          </label>
+          <span class="field__error" id="err-consent" hidden>{copy.consentErr}</span>
+
+          <div class="form__submit">
+            <button class="btn" type="submit" data-submit>{copy.submit} <span class="btn__arrow" aria-hidden="true">→</span></button>
+            <span class="t-small muted">{copy.reply}</span>
+          </div>
+          <p class="form__status t-small" role="status" aria-live="polite" data-form-status></p>
+        </form>
+
+        <div class="form__success" data-form-success hidden tabindex="-1">
+          <p class="t-label" style="color: var(--bronze)">{copy.thanks}</p>
+          <p class="t-h2">{copy.received}</p>
+          <p class="t-lead" data-success-text>{copy.soon}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  function initContactForm() {
+    const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+    if (!form || form.dataset.ready) return;
+    form.dataset.ready = '1';
+    const msg = form.dataset;
+
+    // Pre-select the building from ?building=a
+    const select = form.querySelector<HTMLSelectElement>('[data-building-select]')!;
+    const wanted = new URLSearchParams(location.search).get('building');
+    if (wanted && [...select.options].some((o) => o.value === wanted)) select.value = wanted;
+
+    const status = form.querySelector<HTMLElement>('[data-form-status]')!;
+    const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+
+    const showError = (input: HTMLInputElement, show: boolean) => {
+      const err = document.getElementById(input.getAttribute('aria-describedby') || '');
+      if (err) err.hidden = !show;
+      input.setAttribute('aria-invalid', String(show));
+      input.closest('.field')?.classList.toggle('field--error', show);
+    };
+    const fields = [...form.querySelectorAll<HTMLInputElement>('[required]')];
+    fields.forEach((f) => f.addEventListener(f.type === 'checkbox' ? 'change' : 'blur', () => {
+      if (f.dataset.touched || f.type === 'checkbox') showError(f, !f.checkValidity());
+      f.dataset.touched = '1';
+    }));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const invalid = fields.filter((f) => !f.checkValidity());
+      fields.forEach((f) => showError(f, invalid.includes(f)));
+      if (invalid.length) {
+        status.textContent = msg.msgCheck!;
+        invalid[0].focus();
+        return;
+      }
+      submit.disabled = true;
+      status.textContent = msg.msgSending!;
+      try {
+        const body = new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString();
+        // Netlify Forms handles the POST in production; locally we simulate success.
+        const isLocal = ['localhost', '127.0.0.1'].includes(location.hostname);
+        if (!isLocal) {
+          const res = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+          if (!res.ok) throw new Error(String(res.status));
+        }
+        const label = select.selectedOptions[0]?.textContent || '';
+        const success = document.querySelector<HTMLElement>('[data-form-success]')!;
+        const text = success.querySelector<HTMLElement>('[data-success-text]')!;
+        if (select.value !== 'any' && select.value !== 'general') text.textContent = msg.msgAbout!.replace('{b}', label);
+        form.hidden = true;
+        success.hidden = false;
+        success.focus();
+      } catch {
+        status.textContent = msg.msgFail!;
+        submit.disabled = false;
+      }
+    });
+  }
+  document.addEventListener('astro:page-load', initContactForm);
+</script>
+
+<style>
+  .contact .grid { row-gap: var(--s-9); }
+  .contact__info { grid-column: 1 / span 5; display: grid; gap: var(--s-8); align-content: start; }
+  .contact__list { border-top: 1px solid var(--ink); }
+  .contact__list > div { display: grid; gap: var(--s-1); padding-block: var(--s-4); border-bottom: 1px solid var(--hairline); }
+  .contact__list dd a { justify-self: start; }
+  .contact__form { grid-column: 7 / -1; }
+  form { display: grid; gap: var(--s-5); }
+  .form__row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gutter); }
+  .form__submit { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-5); margin-top: var(--s-4); }
+  .form__status:empty { display: none; }
+  .form__success { display: grid; gap: var(--s-5); padding-block: var(--s-8); border-top: 1px solid var(--ink); outline: none; }
+  .form__success[hidden] { display: none; }
+  .btn[disabled] { opacity: 0.6; pointer-events: none; }
+
+  @media (max-width: 960px) {
+    .contact__info, .contact__form { grid-column: 1 / -1; }
+  }
+  @media (max-width: 600px) {
+    .form__row { grid-template-columns: 1fr; gap: var(--s-5); }
+  }
+</style>

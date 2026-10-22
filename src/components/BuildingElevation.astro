@@ -1,0 +1,37 @@
+---
+// Abstract elevation of one building, drawn in on scroll. Same language as BuildingsDrawing.
+interface Props {
+  shape: { w: number; h: number; floors: number; cols: number; roof?: boolean };
+  class?: string;
+}
+const { shape, class: cls = '' } = Astro.props;
+const pad = 24;
+const maxH = 272; // tallest building + roof, keeps all three on the same baseline
+const ground = maxH + pad;
+const width = 150 + pad * 2; // widest building, so all three share one scale
+const x = Math.round((width - shape.w) / 2);
+const top = ground - shape.h;
+
+const paths: { d: string; delay: number; w: number; faint?: boolean }[] = [];
+paths.push({ d: `M${x} ${ground}V${top}H${x + shape.w}V${ground}`, delay: 150, w: 1.25 });
+if (shape.roof) paths.push({ d: `M${x + 34} ${top}V${top - 16}H${x + shape.w - 34}V${top}`, delay: 700, w: 1 });
+for (let i = 1; i < shape.floors; i++) {
+  const y = Math.round(ground - (i * shape.h) / shape.floors);
+  paths.push({ d: `M${x} ${y}H${x + shape.w}`, delay: 450 + i * 60, w: 0.75, faint: true });
+}
+for (let j = 1; j < shape.cols; j++) {
+  const cx = Math.round(x + (j * shape.w) / shape.cols);
+  paths.push({ d: `M${cx} ${top + 6}V${ground}`, delay: 850 + j * 50, w: 0.5, faint: true });
+}
+---
+<svg class:list={['elevation', cls]} viewBox={`0 0 ${width} ${ground + 14}`} fill="none" stroke="currentColor" aria-hidden="true" data-draw>
+  <path class="d" d={`M0 ${ground}H${width}`} pathLength="1" stroke-width="1.25" style="--d:0" />
+  {paths.map((p) => (
+    <path class:list={['d', { faint: p.faint }]} d={p.d} pathLength="1" stroke-width={p.w} style={`--d:${p.delay}`} />
+  ))}
+</svg>
+
+<style>
+  .elevation { width: 100%; height: auto; overflow: visible; }
+  .faint { opacity: 0.38; }
+</style>

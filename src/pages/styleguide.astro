@@ -1,0 +1,556 @@
+---
+import Base from '../layouts/Base.astro';
+import Logo from '../components/Logo.astro';
+import BuildingsDrawing from '../components/BuildingsDrawing.astro';
+import FloorPlan from '../components/FloorPlan.astro';
+import Icon from '../components/Icon.astro';
+
+// WCAG contrast, computed at build time so the numbers stay true to the tokens.
+const lum = (hex: string) => {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+    .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+const contrast = (a: string, b: string) => {
+  const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+};
+const grade = (r: number) => (r >= 7 ? 'AAA' : r >= 4.5 ? 'AA' : r >= 3 ? 'AA μεγάλο κείμενο' : 'Μόνο διακοσμητικό');
+
+const colors = [
+  // `pair` is the colour it is actually used with, which decides the grade.
+  { name: 'Paper', token: '--paper', hex: '#F5F2EC', role: 'Κύριο φόντο', on: '#15181B', pair: '#15181B', pairName: 'Ink κείμενο' },
+  { name: 'Stone', token: '--stone', hex: '#E9E4DA', role: 'Εναλλακτικό φόντο ενοτήτων', on: '#15181B', pair: '#15181B', pairName: 'Ink κείμενο' },
+  { name: 'Ink', token: '--ink', hex: '#15181B', role: 'Κείμενο, σκούρες ενότητες', on: '#F5F2EC', pair: '#F5F2EC', pairName: 'σε Paper' },
+  { name: 'Graphite', token: '--graphite', hex: '#5E5A54', role: 'Δευτερεύον κείμενο', on: '#F5F2EC', pair: '#E9E4DA', pairName: 'σε Stone (χειρότερη περίπτωση)' },
+  { name: 'Hairline', token: '--hairline', hex: '#D6CFC2', role: 'Γραμμές, διαχωριστικά', on: '#15181B', pair: null, pairName: '' },
+  { name: 'Bronze', token: '--bronze', hex: '#9A7B4F', role: 'Τόνος: λεπτομέρειες μόνο', on: '#F5F2EC', pair: '#F5F2EC', pairName: 'σε Paper' },
+].map((c) => ({
+  ...c,
+  ratio: c.pair ? contrast(c.hex, c.pair) : null,
+}));
+
+const scale = [
+  { name: 'Display', cls: 't-display', spec: 'Noto Serif Display 340 · clamp(48–112px) · 1.06', sample: 'Χαλάνδρι' },
+  { name: 'H1', cls: 't-h1', spec: 'Noto Serif Display 340 · clamp(40–76px)', sample: 'Τα κτίρια' },
+  { name: 'H2', cls: 't-h2', spec: 'Noto Serif Display 340 · clamp(32–56px) · 1.15', sample: 'Τρία κτίρια. Ένας ιδιοκτήτης.' },
+  { name: 'H3', cls: 't-h3', spec: 'Noto Serif Display 340 · clamp(24–32px)', sample: 'Κτίριο Β · Εμπορικό κτίριο' },
+  { name: 'Lead', cls: 't-lead', spec: 'Inter 400 · clamp(19–22px) · 1.5', sample: 'Τρία αυτοτελή εμπορικά κτίρια, που μισθώνονται ολόκληρα, απευθείας από την ιδιοκτήτρια εταιρεία.' },
+  { name: 'Body', cls: 't-body', spec: 'Inter 400 · 17px · 1.6', sample: 'Από το 2018 η εταιρεία διαχειρίζεται τρία εμπορικά κτίρια στο Χαλάνδρι. Κάθε κτίριο μισθώνεται ολόκληρο σε έναν μισθωτή και συντηρείται με την τεχνική εμπειρία μιας κατασκευαστικής εταιρείας.' },
+  { name: 'Small', cls: 't-small', spec: 'Inter 400 · 15px', sample: 'Απαντάμε συνήθως εντός μίας εργάσιμης ημέρας.' },
+  { name: 'Label', cls: 't-label', spec: 'Inter 500 · 12px · uppercase · 0.14em', sample: 'Τα κτίρια · Ενδιαφέρομαι' },
+];
+
+const spacing = [4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 160, 200];
+
+// Sample only: real sizes and statuses come from the client. Never add tenant names.
+const rows = [
+  { building: 'Α', use: 'Εμπορικό κτίριο', floors: 3, area: 1250.5, plot: 900, status: 'rented', statusLabel: 'Μισθωμένο' },
+  { building: 'Β', use: 'Εμπορικό κτίριο', floors: 4, area: 1850, plot: 1100, status: 'rented', statusLabel: 'Μισθωμένο' },
+  { building: 'Γ', use: 'Εμπορικό κτίριο', floors: 3, area: 1750, plot: 1000, status: 'soon', statusLabel: 'Από 1 Μαρτίου 2028' },
+];
+const fmt = (n: number) => n.toLocaleString('el-GR');
+---
+<Base title="Style tile · Θεοδοσίου Τεχνική" lang="el" noindex chrome={false}>
+
+  <!-- Intro / hero demo -->
+  <section class="sg-hero wrap" id="hero-demo">
+    <div class="sg-hero__text">
+      <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">00</span><span class="eyebrow__rule"></span>Style tile · Προς έγκριση</p>
+      <h1 class="t-display" data-lines style="--delay:900ms">
+        <span class="mask"><span>Εμπορικά</span></span>
+        <span class="mask"><span>κτίρια στο</span></span>
+        <span class="mask"><span>Χαλάνδρι.</span></span>
+      </h1>
+      <p class="t-lead" data-reveal style="--i:14">Τρία αυτοτελή κτίρια, που μισθώνονται ολόκληρα, απευθείας από την ιδιοκτήτρια εταιρεία.</p>
+      <div class="sg-hero__ctas" data-reveal style="--i:16">
+        <a class="btn" href="#components">Δείτε τα κτίρια <span class="btn__arrow" aria-hidden="true">→</span></a>
+        <a class="link" href="#components">Επικοινωνία</a>
+      </div>
+    </div>
+    <div class="sg-hero__art">
+      <BuildingsDrawing />
+    </div>
+    <button class="sg-replay t-label" type="button" data-replay="#hero-demo">↺ Επανάληψη κίνησης</button>
+  </section>
+
+  <!-- Key numbers -->
+  <section class="wrap sg-numbers" aria-label="Βασικά στοιχεία">
+    <hr class="rule" data-rule />
+    <dl class="numbers" data-reveal-group>
+      <div data-reveal><dt class="t-label muted">Κτίρια</dt><dd class="t-h1 num" data-count="3">3</dd></div>
+      <div data-reveal><dt class="t-label muted">Από το</dt><dd class="t-h1 num">2018</dd></div>
+      <div data-reveal><dt class="t-label muted">Συνολικά m²</dt><dd class="t-h1 num" data-count="4850">4.850</dd></div>
+      <div data-reveal><dt class="t-label muted">Μισθωμένα</dt><dd class="t-h1 num"><span data-count="100">100</span>%</dd></div>
+    </dl>
+    <hr class="rule" data-rule />
+    <p class="t-small sg-note">Δείγμα αριθμών, θα αντικατασταθούν με τα πραγματικά στοιχεία.</p>
+  </section>
+
+  <!-- 01 Logo -->
+  <section class="section">
+    <div class="wrap">
+      <div class="grid sg-head">
+        <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">01</span><span class="eyebrow__rule"></span>Λογότυπο</p>
+        <h2 class="t-h2" data-reveal>Τρία κτίρια, ένα σήμα.</h2>
+        <p class="t-body muted" data-reveal>Τρεις όγκοι με διαφορετικό ύψος, ένας για κάθε κτίριο. Το όνομα σε serif με πολύ ανοιχτό διάστιχο, η ιδιότητα από κάτω σε μικρά κεφαλαία.</p>
+      </div>
+      <div class="sg-logos" data-reveal-group>
+        <div class="sg-logo-tile" data-reveal><Logo lang="el" size={56} /><span class="t-label muted">Ελληνικά · σε Paper</span></div>
+        <div class="sg-logo-tile sg-logo-tile--ink" data-reveal><Logo lang="en" size={56} accent /><span class="t-label">English · σε Ink, με τόνο</span></div>
+        <div class="sg-logo-tile sg-logo-tile--stone" data-reveal>
+          <div class="sg-marks">
+            <Logo variant="mark" size={64} />
+            <Logo variant="mark" size={32} />
+            <Logo variant="mark" size={16} />
+          </div>
+          <span class="t-label muted">Σήμα · favicon 64 / 32 / 16</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Colour -->
+  <section class="section section--stone">
+    <div class="wrap">
+      <div class="grid sg-head">
+        <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">02</span><span class="eyebrow__rule"></span>Χρώματα</p>
+        <h2 class="t-h2" data-reveal>Χαρτί, μελάνι, μπρούντζος.</h2>
+        <p class="t-body muted" data-reveal>Ζεστά ουδέτερα για ηρεμία, βαθύ μελάνι για κείμενο και ένας τόνος μπρούντζου μόνο σε μικρές λεπτομέρειες. Ο λόγος αντίθεσης υπολογίζεται αυτόματα από τα tokens.</p>
+      </div>
+      <ul class="swatches" data-reveal-group>
+        {colors.map((c) => (
+          <li class="swatch" data-reveal>
+            <span class="swatch__chip" style={`background:${c.hex};color:${c.on}`}>
+              <span class="t-h3">Αα</span>
+            </span>
+            <span class="swatch__meta">
+              <strong class="t-label">{c.name}</strong>
+              <span class="t-small">{c.role}</span>
+              <code class="t-small num">{c.hex} · var({c.token})</code>
+              {c.ratio
+                ? <span class="t-small num">{c.pairName}: {c.ratio.toFixed(1).replace('.', ',')}:1 · {grade(c.ratio)}</span>
+                : <span class="t-small">Μόνο γραμμές, όχι για κείμενο</span>}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 03 Typography -->
+  <section class="section">
+    <div class="wrap">
+      <div class="grid sg-head">
+        <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">03</span><span class="eyebrow__rule"></span>Τυπογραφία</p>
+        <h2 class="t-h2" data-reveal>Η γραμματοσειρά κάνει τον σχεδιασμό.</h2>
+        <p class="t-body muted" data-reveal>Noto Serif Display για τίτλους, Inter για κείμενο, πίνακες και κουμπιά. Και οι δύο με πλήρη υποστήριξη ελληνικών, φιλοξενούνται στον δικό μας server.</p>
+      </div>
+
+      <ol class="type-scale">
+        {scale.map((s) => (
+          <li class="type-row" data-reveal>
+            <div class="type-row__meta">
+              <span class="t-label">{s.name}</span>
+              <span class="t-small">{s.spec}</span>
+            </div>
+            <p class={s.cls}>{s.sample}</p>
+          </li>
+        ))}
+      </ol>
+
+      <div class="glyphs grid" data-reveal>
+        <div class="glyphs__col">
+          <p class="t-label muted">Έλεγχος ελληνικών χαρακτήρων</p>
+          <p class="t-h3">ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ<br />αβγδεζηθικλμνξοπρσςτυφχψω<br />άέήίόύώ ϊϋ ΐΰ « » ; · 0123456789</p>
+          <p class="t-body">ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ αβγδεζηθικλμνξοπρσςτυφχψω άέήίόύώ ϊϋΐΰ</p>
+        </div>
+        <div class="glyphs__col">
+          <p class="t-label muted">Κεφαλαία χωρίς τόνους (CSS uppercase, lang="el")</p>
+          <p class="t-h3 upper">Τα κτίρια · Η Εταιρεία · Τοποθεσία · Επικοινωνία</p>
+          <p class="t-small">Πηγή: «Τα κτίρια · Η Εταιρεία · Τοποθεσία · Επικοινωνία». Σωστό αποτέλεσμα: ΤΑ ΚΤΙΡΙΑ, χωρίς τόνους.</p>
+          <p class="t-label muted sg-mt">Αριθμοί πίνακα (tabular)</p>
+          <p class="t-h3 num">1.250,5 m² · 85 m² · 140 m²</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 Spacing & grid -->
+  <section class="section section--stone">
+    <div class="wrap">
+      <div class="grid sg-head">
+        <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">04</span><span class="eyebrow__rule"></span>Χώρος & πλέγμα</p>
+        <h2 class="t-h2" data-reveal>Ο κενός χώρος είναι η πολυτέλεια.</h2>
+        <p class="t-body muted" data-reveal>Κλίμακα με βάση τα 4px. Πλέγμα 12 στηλών, μέγιστο πλάτος 1280px, ενότητες με κάθετο περιθώριο 96–200px.</p>
+      </div>
+      <ul class="spacing" data-reveal-group>
+        {spacing.map((s) => (
+          <li data-reveal><span class="spacing__bar" style={`width:${s}px`}></span><span class="t-small num">{s}</span></li>
+        ))}
+      </ul>
+      <div class="grid-demo grid" aria-hidden="true" data-reveal-group>
+        {Array.from({ length: 12 }, (_, i) => <span data-reveal><span class="t-label num">{i + 1}</span></span>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 Components -->
+  <section class="section" id="components">
+    <div class="wrap">
+      <div class="grid sg-head">
+        <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">05</span><span class="eyebrow__rule"></span>Στοιχεία</p>
+        <h2 class="t-h2" data-reveal>Κουμπιά, πίνακας, φόρμα.</h2>
+        <p class="t-body muted" data-reveal>Περάστε το ποντίκι πάνω από κάθε στοιχείο για να δείτε τις μικρο-κινήσεις. Με το πληκτρολόγιο (Tab) εμφανίζεται το περίγραμμα εστίασης.</p>
+      </div>
+
+      <div class="sg-block" data-reveal>
+        <p class="t-label muted sg-block__title">Κουμπιά & σύνδεσμοι</p>
+        <div class="sg-row">
+          <a class="btn" href="#components">Δείτε τα κτίρια <span class="btn__arrow" aria-hidden="true">→</span></a>
+          <a class="btn btn--outline" href="#components">Ενδιαφέρομαι <span class="btn__arrow" aria-hidden="true">→</span></a>
+          <a class="btn btn--small" href="#components">Επικοινωνία</a>
+          <a class="text-cta" href="#components">Όλα τα κτίρια <span class="btn__arrow" aria-hidden="true">→</span></a>
+          <a class="link" href="#components">Σύνδεσμος κειμένου</a>
+        </div>
+        <div class="sg-row">
+          <span class="status">Διαθέσιμο</span>
+          <span class="status status--soon">Από 1 Μαρτίου 2028</span>
+          <span class="status status--rented">Μισθωμένο</span>
+        </div>
+      </div>
+
+      <div class="sg-block" data-reveal>
+        <p class="t-label muted sg-block__title">Πίνακας κτιρίων (σε κινητό γίνεται κάρτες)</p>
+        <table class="spaces">
+          <caption class="t-small">Δείγμα στοιχείων: τα πραγματικά εμβαδά θα δοθούν από την εταιρεία</caption>
+          <thead>
+            <tr>
+              <th scope="col">Κτίριο</th>
+              <th scope="col">Χρήση</th>
+              <th scope="col" class="is-num">Όροφοι</th>
+              <th scope="col" class="is-num">Εμβαδόν</th>
+              <th scope="col" class="is-num">Οικόπεδο</th>
+              <th scope="col">Κατάσταση</th>
+              <th scope="col"><span class="visually-hidden">Ενέργεια</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr class:list={{ 'is-rented': r.status === 'rented' }}>
+                <td data-label="Κτίριο" class="code">Κτίριο {r.building}</td>
+                <td data-label="Χρήση">{r.use}</td>
+                <td data-label="Όροφοι" class="is-num">{r.floors}</td>
+                <td data-label="Εμβαδόν" class="is-num">{fmt(r.area)} m²</td>
+                <td data-label="Οικόπεδο" class="is-num">{fmt(r.plot)} m²</td>
+                <td data-label="Κατάσταση"><span class:list={['status', { 'status--soon': r.status === 'soon', 'status--rented': r.status === 'rented' }]}>{r.statusLabel}</span></td>
+                <td>
+                  <a class="btn btn--outline btn--small" href="#form-demo">Ενδιαφέρομαι <span class="btn__arrow" aria-hidden="true">→</span></a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="t-small muted sg-mt">Όταν όλα είναι μισθωμένα: «Όλα τα κτίρια είναι αυτή τη στιγμή μισθωμένα. Αφήστε μας τα στοιχεία σας και θα επικοινωνήσουμε μαζί σας όταν κάποιο διατεθεί.»</p>
+      </div>
+
+      <div class="sg-block grid" id="form-demo" data-reveal>
+        <div class="sg-form-intro">
+          <p class="t-label muted sg-block__title">Φόρμα επικοινωνίας</p>
+          <p class="t-h3">Ενδιαφέρεστε για ένα κτίριο;</p>
+          <p class="t-small sg-mt">Η ετικέτα ανεβαίνει και η γραμμή γίνεται μπρούντζινη κατά την εστίαση.</p>
+        </div>
+        <form class="sg-form" onsubmit="return false" novalidate>
+          <label class="field">
+            <input class="field__input" type="text" name="name" placeholder=" " autocomplete="name" required />
+            <span class="field__label">Ονοματεπώνυμο *</span>
+            <span class="field__line"></span>
+          </label>
+          <label class="field">
+            <input class="field__input" type="text" name="company" placeholder=" " autocomplete="organization" required />
+            <span class="field__label">Εταιρεία *</span>
+            <span class="field__line"></span>
+          </label>
+          <label class="field field--error">
+            <input class="field__input" type="email" name="email" placeholder=" " value="name@" autocomplete="email" aria-invalid="true" aria-describedby="email-err" />
+            <span class="field__label">Email *</span>
+            <span class="field__line"></span>
+            <span class="field__error" id="email-err">Συμπληρώστε ένα έγκυρο email.</span>
+          </label>
+          <label class="field field--select">
+            <select class="field__input" name="building">
+              <option>Κτίριο Α</option>
+              <option>Κτίριο Β</option>
+              <option>Κτίριο Γ</option>
+              <option>Οποιοδήποτε</option>
+              <option>Γενική ερώτηση</option>
+            </select>
+            <span class="field__label">Κτίριο ενδιαφέροντος</span>
+            <span class="field__line"></span>
+          </label>
+          <label class="field">
+            <textarea class="field__input" name="message" placeholder=" " rows="3"></textarea>
+            <span class="field__label">Μήνυμα</span>
+            <span class="field__line"></span>
+          </label>
+          <label class="check">
+            <input type="checkbox" required />
+            <span>Συμφωνώ με την επεξεργασία των στοιχείων μου σύμφωνα με την <a class="link" href="#components">Πολιτική Απορρήτου</a>.</span>
+          </label>
+          <div class="sg-row">
+            <button class="btn" type="submit">Αποστολή <span class="btn__arrow" aria-hidden="true">→</span></button>
+            <span class="t-small muted">Απαντάμε συνήθως εντός μίας εργάσιμης ημέρας.</span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 Graphics (dark section) -->
+  <section class="section section--ink" id="graphics-demo">
+    <div class="wrap">
+      <div class="grid sg-head">
+        <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">06</span><span class="eyebrow__rule"></span>Γραφικά</p>
+        <h2 class="t-h2" data-reveal>Χωρίς φωτογραφίες. Μόνο γραμμές.</h2>
+        <p class="t-body t-lead" data-reveal>Αφηρημένα αρχιτεκτονικά σχέδια σε SVG: όψεις, κατόψεις, γραμμές διαστάσεων. Ελαφριά, καθαρά σε κάθε οθόνη, ποτέ αντίγραφο των πραγματικών κτιρίων.</p>
+      </div>
+      <div class="graphics grid">
+        <figure class="graphics__plan">
+          <FloorPlan area="140 m²" />
+          <figcaption class="t-label">Κάτοψη ισογείου</figcaption>
+        </figure>
+        <ul class="activities" data-reveal-group>
+          <li data-reveal><Icon name="develop" /><span class="t-h3">Ανάπτυξη & αξιοποίηση ακινήτων</span></li>
+          <li data-reveal><Icon name="lease" /><span class="t-h3">Εκμετάλλευση & διαχείριση ακινήτων</span></li>
+          <li data-reveal><Icon name="services" /><span class="t-h3">Παροχή υπηρεσιών</span></li>
+          <li data-reveal><Icon name="build" /><span class="t-h3">Τεχνικά & κατασκευαστικά έργα</span></li>
+        </ul>
+      </div>
+      <div class="sg-row sg-mt-lg">
+        <a class="btn btn--light" href="#components">Επικοινωνία <span class="btn__arrow" aria-hidden="true">→</span></a>
+        <a class="link" href="#components">Σύνδεσμος σε σκούρο φόντο</a>
+        <button class="sg-replay sg-replay--inline t-label" type="button" data-replay="#graphics-demo">↺ Επανάληψη σχεδίου</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 Motion -->
+  <section class="section" id="motion-demo">
+    <div class="wrap">
+      <div class="grid sg-head">
+        <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">07</span><span class="eyebrow__rule"></span>Κίνηση</p>
+        <h2 class="t-h2" data-reveal>Αργή, ομαλή, ακριβής.</h2>
+        <p class="t-body muted" data-reveal>Σαν πένα αρχιτέκτονα: καμία αναπήδηση, καμία υπερβολή. Μόνο transform, opacity και σχεδίαση γραμμών. Με «μειωμένη κίνηση» στη συσκευή όλα εμφανίζονται αμέσως.</p>
+      </div>
+
+      <dl class="motion-tokens" data-reveal-group>
+        <div data-reveal><dt class="t-label muted">Fast · 180ms</dt><dd class="t-small">Hover, εστίαση</dd></div>
+        <div data-reveal><dt class="t-label muted">Base · 420ms</dt><dd class="t-small">Κουμπιά, φόρμα, header</dd></div>
+        <div data-reveal><dt class="t-label muted">Slow · 900ms</dt><dd class="t-small">Εμφάνιση ενοτήτων, τίτλοι</dd></div>
+        <div data-reveal><dt class="t-label muted">Draw · 1600ms</dt><dd class="t-small">Σχεδίαση γραμμών SVG</dd></div>
+        <div data-reveal><dt class="t-label muted">Ease out</dt><dd class="t-small num">cubic-bezier(0.22, 1, 0.36, 1)</dd></div>
+        <div data-reveal><dt class="t-label muted">Ease in-out</dt><dd class="t-small num">cubic-bezier(0.65, 0, 0.35, 1)</dd></div>
+      </dl>
+
+      <div class="motion-demos grid">
+        <div class="motion-demo" id="demo-reveal">
+          <p class="t-label muted">Εμφάνιση με κλιμάκωση</p>
+          <div class="motion-demo__stage" data-reveal-group>
+            <span data-reveal></span><span data-reveal></span><span data-reveal></span><span data-reveal></span>
+          </div>
+          <button class="sg-replay sg-replay--inline t-label" type="button" data-replay="#demo-reveal">↺ Επανάληψη</button>
+        </div>
+        <div class="motion-demo" id="demo-rule">
+          <p class="t-label muted">Γραμμή που απλώνεται</p>
+          <div class="motion-demo__stage motion-demo__stage--rule">
+            <hr class="rule" data-rule />
+            <hr class="rule" data-rule style="transition-delay:150ms" />
+            <hr class="rule" data-rule style="transition-delay:300ms" />
+          </div>
+          <button class="sg-replay sg-replay--inline t-label" type="button" data-replay="#demo-rule">↺ Επανάληψη</button>
+        </div>
+        <div class="motion-demo" id="demo-count">
+          <p class="t-label muted">Μετρητής</p>
+          <div class="motion-demo__stage">
+            <span class="t-h1 num" data-count="4850">4.850</span><span class="t-h3"> m²</span>
+          </div>
+          <button class="sg-replay sg-replay--inline t-label" type="button" data-replay="#demo-count">↺ Επανάληψη</button>
+        </div>
+        <div class="motion-demo" id="demo-lines">
+          <p class="t-label muted">Τίτλος γραμμή-γραμμή</p>
+          <div class="motion-demo__stage">
+            <p class="t-h2" data-lines>
+              <span class="mask"><span>Τρία κτίρια.</span></span>
+              <span class="mask"><span>Ένας ιδιοκτήτης.</span></span>
+            </p>
+          </div>
+          <button class="sg-replay sg-replay--inline t-label" type="button" data-replay="#demo-lines">↺ Επανάληψη</button>
+        </div>
+      </div>
+
+      <p class="t-small muted sg-mt-lg">Header: διαφανές στην κορυφή, γίνεται συμπαγές με λεπτή γραμμή μετά τα 80px, κρύβεται όταν κάνετε scroll προς τα κάτω και επιστρέφει προς τα πάνω. Σε κινητό, το μενού ανοίγει με αποκάλυψη από πάνω.</p>
+    </div>
+  </section>
+
+  <footer class="section section--stone sg-footer">
+    <div class="wrap">
+      <Logo lang="el" size={40} />
+      <p class="t-small sg-mt">ΘΕΟΔΟΣΙΟΥ ΤΕΧΝΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ – ΑΝΑΠΤΥΞΗ ΚΑΙ ΑΞΙΟΠΟΙΗΣΗ ΑΚΙΝΗΤΩΝ ΚΑΙ ΠΑΡΟΧΗ ΥΠΗΡΕΣΙΩΝ – ΕΚΜΕΤΑΛΛΕΥΣΗ ΑΚΙΝΗΤΩΝ – ΤΕΧΝΙΚΗ ΚΑΤΑΣΚΕΥΑΣΤΙΚΗ ΕΤΑΙΡΕΙΑ</p>
+      <p class="t-small">Πλάτωνος 11, Χαλάνδρι · ΓΕΜΗ [—] · ΑΦΜ [—]</p>
+    </div>
+  </footer>
+</Base>
+
+<script>
+  import { replay } from '../scripts/motion.js';
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLButtonElement>('[data-replay]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const scope = document.querySelector<HTMLElement>(btn.dataset.replay!);
+        if (scope) replay(scope);
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Hero */
+  .sg-hero {
+    position: relative;
+    min-height: 100svh;
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter);
+    align-items: center;
+    padding-top: calc(var(--header-h) + var(--s-8));
+    padding-bottom: var(--s-9);
+  }
+  .sg-hero__text { grid-column: 1 / span 6; display: grid; gap: var(--s-6); position: relative; z-index: 1; }
+  .sg-hero__art { grid-column: 7 / -1; color: var(--ink); }
+  .sg-hero__ctas { display: flex; align-items: center; gap: var(--s-6); flex-wrap: wrap; margin-top: var(--s-4); }
+
+  .sg-replay {
+    position: absolute; right: var(--edge); bottom: var(--s-6);
+    background: none; border: 0; padding: var(--s-2) 0; cursor: pointer; color: var(--graphite);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .sg-replay:hover { color: var(--ink); }
+  .sg-replay--inline { position: static; }
+  .section--ink .sg-replay { color: var(--paper-muted); }
+  .section--ink .sg-replay:hover { color: var(--paper); }
+
+  /* Numbers */
+  .sg-numbers { padding-bottom: var(--s-9); }
+  .numbers { display: grid; grid-template-columns: repeat(4, 1fr); padding-block: var(--s-7); }
+  .numbers > div { display: grid; gap: var(--s-3); padding-right: var(--s-5); }
+  .numbers > div + div { border-left: 1px solid var(--hairline); padding-left: var(--s-6); }
+  .sg-note { margin-top: var(--s-4); }
+
+  /* Section heads */
+  .sg-head { row-gap: var(--s-5); margin-bottom: var(--s-9); align-items: end; }
+  .sg-head .eyebrow { grid-column: 1 / -1; }
+  .sg-head .t-h2 { grid-column: 1 / span 6; }
+  .sg-head .t-body { grid-column: 8 / span 5; }
+
+  /* Logos */
+  .sg-logos { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gutter); }
+  .sg-logo-tile {
+    display: flex; flex-direction: column; justify-content: space-between; gap: var(--s-9);
+    padding: var(--s-8) var(--s-6) var(--s-5);
+    border: 1px solid var(--hairline); min-height: 300px;
+  }
+  .sg-logo-tile--ink { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .sg-logo-tile--stone { background: var(--stone); border-color: var(--stone); }
+  .sg-marks { display: flex; align-items: flex-end; gap: var(--s-7); }
+
+  /* Swatches */
+  .swatches { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-7) var(--gutter); }
+  .swatch { display: grid; gap: var(--s-4); }
+  .swatch__chip {
+    aspect-ratio: 4 / 3; display: flex; align-items: flex-end; padding: var(--s-5);
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.06);
+  }
+  .swatch__meta { display: grid; gap: 2px; }
+  .swatch__meta code { font-family: var(--font-text); }
+
+  /* Type scale */
+  .type-scale { list-style: none; padding: 0; border-top: 1px solid var(--ink); }
+  .type-row {
+    display: grid; grid-template-columns: 220px 1fr; gap: var(--gutter); align-items: baseline;
+    padding-block: var(--s-7); border-bottom: 1px solid var(--hairline);
+  }
+  .type-row__meta { display: grid; gap: var(--s-1); color: var(--graphite); }
+  .glyphs { margin-top: var(--s-9); row-gap: var(--s-7); }
+  .glyphs__col { grid-column: span 6; display: grid; gap: var(--s-4); align-content: start; }
+  .glyphs p { overflow-wrap: anywhere; }
+  .upper { text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* Spacing */
+  .spacing { list-style: none; padding: 0; display: grid; gap: var(--s-3); margin-bottom: var(--s-9); }
+  .spacing li { display: flex; align-items: center; gap: var(--s-5); }
+  .spacing__bar { height: 12px; background: var(--ink); }
+  .grid-demo > span {
+    height: 120px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: var(--s-3);
+    background: color-mix(in srgb, var(--bronze) 12%, transparent);
+    border-inline: 1px solid color-mix(in srgb, var(--bronze) 35%, transparent);
+    color: var(--bronze);
+  }
+
+  /* Components */
+  .sg-block { padding-block: var(--s-8); border-top: 1px solid var(--hairline); }
+  .sg-block__title { margin-bottom: var(--s-6); }
+  .sg-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-5) var(--s-7); }
+  .sg-row + .sg-row { margin-top: var(--s-6); }
+  .sg-form-intro { grid-column: 1 / span 4; }
+  .sg-form { grid-column: 6 / -1; display: grid; gap: var(--s-5); }
+  .sg-mt { margin-top: var(--s-4); }
+  .sg-mt-lg { margin-top: var(--s-8); }
+
+  /* Graphics */
+  .graphics { row-gap: var(--s-8); align-items: center; }
+  .graphics__plan { grid-column: 1 / span 5; color: var(--paper); display: grid; gap: var(--s-4); }
+  .graphics__plan figcaption { color: var(--paper-muted); }
+  .activities { grid-column: 7 / -1; list-style: none; padding: 0; }
+  .activities li {
+    display: grid; grid-template-columns: 56px 1fr; align-items: center; gap: var(--s-5);
+    padding-block: var(--s-5); border-bottom: 1px solid var(--ink-hairline);
+  }
+  .activities li:first-child { border-top: 1px solid var(--ink-hairline); }
+  .activities :global(.icon) { color: var(--bronze); }
+
+  /* Motion */
+  .motion-tokens { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--gutter); margin-bottom: var(--s-8); }
+  .motion-tokens > div { border-top: 1px solid var(--ink); padding-top: var(--s-4); display: grid; gap: var(--s-2); }
+  .motion-demos { row-gap: var(--gutter); }
+  .motion-demo {
+    grid-column: span 6; border: 1px solid var(--hairline); padding: var(--s-6);
+    display: grid; gap: var(--s-5); align-content: start; justify-items: start;
+  }
+  .motion-demo__stage { min-height: 140px; width: 100%; display: flex; align-items: center; gap: var(--s-4); }
+  .motion-demo__stage > span[data-reveal] { width: 64px; height: 96px; background: var(--stone); border-top: 2px solid var(--ink); }
+  .motion-demo__stage--rule { flex-direction: column; justify-content: center; align-items: stretch; gap: var(--s-6); }
+  .motion-demo__stage--rule .rule { background: var(--ink); }
+
+  .sg-footer .t-small { max-width: 60em; }
+
+  @media (max-width: 960px) {
+    .sg-hero { min-height: auto; row-gap: var(--s-8); }
+    .sg-hero__text, .sg-hero__art { grid-column: 1 / -1; }
+    .sg-hero__art { order: -1; max-width: 520px; }
+    .sg-head .t-h2, .sg-head .t-body { grid-column: 1 / -1; }
+    .sg-logos, .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .numbers { grid-template-columns: 1fr 1fr; row-gap: var(--s-7); }
+    .numbers > div:nth-child(3) { border-left: 0; padding-left: 0; }
+    .sg-form-intro, .sg-form, .graphics__plan, .activities, .glyphs__col { grid-column: 1 / -1; }
+    .motion-tokens { grid-template-columns: repeat(3, 1fr); row-gap: var(--s-6); }
+    .motion-demo { grid-column: 1 / -1; }
+  }
+  @media (max-width: 600px) {
+    .sg-logos, .swatches { grid-template-columns: minmax(0, 1fr); }
+    .sg-logo-tile { min-height: 220px; gap: var(--s-7); }
+    .sg-logo-tile :global(.logo--full) { --mark: 38px !important; }
+    .type-row { grid-template-columns: 1fr; gap: var(--s-3); }
+    .motion-tokens { grid-template-columns: 1fr 1fr; }
+    .grid-demo > span:nth-child(n + 7) { display: none; }
+    .grid-demo { grid-template-columns: repeat(6, 1fr); }
+    .sg-replay { position: static; justify-self: start; grid-column: 1 / -1; }
+  }
+</style>

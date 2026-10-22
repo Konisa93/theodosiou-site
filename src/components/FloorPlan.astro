@@ -1,0 +1,25 @@
+---
+// Abstract floor plan of a single space, with a dimension label.
+interface Props { area?: string; class?: string; }
+const { area = '120 m²', class: cls = '' } = Astro.props;
+---
+<svg class:list={['plan', cls]} viewBox="0 0 320 220" fill="none" stroke="currentColor" aria-hidden="true" data-draw>
+  <path class="d" pathLength="1" stroke-width="2" d="M30 30H170M206 30H290V190H30V30" style="--d:0" />
+  <path class="d" pathLength="1" stroke-width="1" d="M190 30V110H290" style="--d:400" />
+  <path class="d" pathLength="1" stroke-width="1" d="M190 150V190" style="--d:500" />
+  <path class="d faint" pathLength="1" stroke-width="0.75" d="M170 30A36 36 0 0 0 206 66V30" style="--d:700" />
+  <path class="d faint" pathLength="1" stroke-width="0.75" d="M190 110A40 40 0 0 1 230 150H190" style="--d:800" />
+  <path class="f faint" stroke-width="0.5" d="M30 205H290M30 199v12M290 199v12" style="--d:900" />
+  <text class="f label" x="110" y="118" text-anchor="middle" style="--d:1100">{area}</text>
+</svg>
+
+<style>
+  .plan { width: 100%; height: auto; overflow: visible; }
+  .faint { opacity: 0.45; }
+  :global(.js) [data-draw] .f.faint { opacity: 0; }
+  :global(.js) [data-draw].is-in .f.faint { opacity: 0.45; }
+  .label {
+    fill: currentColor; stroke: none;
+    font-family: var(--font-display); font-size: 22px; font-weight: 340;
+  }
+</style>

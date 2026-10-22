@@ -1,0 +1,283 @@
+---
+import Base from '../layouts/Base.astro';
+import BuildingsDrawing from '../components/BuildingsDrawing.astro';
+import BuildingElevation from '../components/BuildingElevation.astro';
+import AreaMap from '../components/AreaMap.astro';
+import { buildings, fmt, totalArea, leasedCount, allLeased, statusLabel, statusClass, COMPANY } from '../lib/buildings';
+import { path, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+
+const copy = {
+  el: {
+    title: 'Θεοδοσίου Τεχνική Α.Ε. · Εμπορικά κτίρια στο Χαλάνδρι',
+    description: 'Τρία αυτοτελή εμπορικά κτίρια στο Χαλάνδρι, που μισθώνονται ολόκληρα, απευθείας από την ιδιοκτήτρια εταιρεία.',
+    place: 'Χαλάνδρι · Αθήνα',
+    hero: ['Εμπορικά', 'κτίρια στο', 'Χαλάνδρι.'],
+    lead: 'Τρία αυτοτελή κτίρια, που μισθώνονται ολόκληρα, απευθείας από την ιδιοκτήτρια εταιρεία.',
+    seeBuildings: 'Δείτε τα κτίρια',
+    contact: 'Επικοινωνία',
+    numbersLabel: 'Βασικά στοιχεία',
+    nBuildings: 'Κτίρια', since: 'Από το', totalArea: 'Συνολικά m²', leased: 'Μισθωμένα', available: 'Διαθέσιμα',
+    bEyebrow: 'Τα κτίρια',
+    bTitle: 'Τρία κτίρια. Ένας ιδιοκτήτης.',
+    bText: 'Κάθε κτίριο μισθώνεται ολόκληρο σε έναν μισθωτή. Ιδανικά για εταιρείες λιανικής, εκθέσεις και επιχειρήσεις που θέλουν δική τους, αυτοτελή παρουσία.',
+    floors: 'Όροφοι', area: 'Εμβαδόν', status: 'Κατάσταση', details: 'Λεπτομέρειες',
+    sample: 'Δείγμα στοιχείων: εμβαδά και όροφοι θα αντικατασταθούν με τα πραγματικά.',
+    whyEyebrow: 'Γιατί εμάς',
+    whyTitle: 'Χωρίς μεσάζοντες. Με τεχνική γνώση.',
+    reasons: [
+      { title: 'Απευθείας από τον ιδιοκτήτη', text: 'Μιλάτε κατευθείαν με την εταιρεία που κατέχει τα κτίρια, χωρίς μεσάζοντες.' },
+      { title: 'Τεχνική εμπειρία', text: 'Ως τεχνική κατασκευαστική εταιρεία φροντίζουμε τη συντήρηση των κτιρίων μας με συνέπεια.' },
+      { title: 'Προσαρμογή στις ανάγκες σας', text: 'Μελετάμε μαζί σας τις αλλαγές που χρειάζεται η επιχείρησή σας. [ΝΑ ΕΠΙΒΕΒΑΙΩΘΕΙ]' },
+      { title: 'Αυτοτελή κτίρια', text: 'Κάθε κτίριο μισθώνεται ολόκληρο, σε έναν μισθωτή. [ΧΑΡΑΚΤΗΡΙΣΤΙΚΑ: πρόσοψη, στάθμευση, πρόσβαση]' },
+    ],
+    locEyebrow: 'Τοποθεσία',
+    locTitle: 'Στην καρδιά του Χαλανδρίου.',
+    locText: '[ΠΡΟΣΒΑΣΗ: απόσταση από μετρό, κεντρικούς δρόμους, στάθμευση]',
+    locLink: 'Χάρτης & πρόσβαση',
+    mapLabel: 'Χαλάνδρι',
+    ctaTitle: ['Ενδιαφέρεστε', 'για ένα κτίριο;'],
+    ctaAllLeased: 'Όλα τα κτίρια είναι αυτή τη στιγμή μισθωμένα. Αφήστε μας τα στοιχεία σας και θα επικοινωνήσουμε μαζί σας όταν κάποιο διατεθεί.',
+    ctaOpen: 'Πείτε μας τι χρειάζεται η επιχείρησή σας και θα επικοινωνήσουμε μαζί σας.',
+    ctaButton: 'Εκδήλωση ενδιαφέροντος',
+  },
+  en: {
+    title: 'Theodosiou Texniki AE · Commercial buildings in Chalandri',
+    description: 'Three standalone commercial buildings in Chalandri, Athens, each leased as a whole, directly from the owning company.',
+    place: 'Chalandri · Athens',
+    hero: ['Commercial', 'buildings in', 'Chalandri.'],
+    lead: 'Three standalone buildings, each leased as a whole, directly from the owning company.',
+    seeBuildings: 'View the buildings',
+    contact: 'Contact',
+    numbersLabel: 'Key figures',
+    nBuildings: 'Buildings', since: 'Since', totalArea: 'Total m²', leased: 'Leased', available: 'Available',
+    bEyebrow: 'The buildings',
+    bTitle: 'Three buildings. One owner.',
+    bText: 'Each building is leased as a whole to a single tenant. Suited to retail companies, showrooms and businesses that want a standalone presence of their own.',
+    floors: 'Floors', area: 'Area', status: 'Status', details: 'Details',
+    sample: 'Sample figures: areas and floors will be replaced with the real ones.',
+    whyEyebrow: 'Why us',
+    whyTitle: 'No middlemen. Real technical know-how.',
+    reasons: [
+      { title: 'Directly from the owner', text: 'You deal directly with the company that owns the buildings, with no agents in between.' },
+      { title: 'Technical experience', text: 'As a technical and construction company, we look after the upkeep of our buildings consistently.' },
+      { title: 'Adapted to your needs', text: 'We work with you on the changes your business needs. [TO CONFIRM]' },
+      { title: 'Standalone buildings', text: 'Each building is leased as a whole, to a single tenant. [FEATURES: frontage, parking, access]' },
+    ],
+    locEyebrow: 'Location',
+    locTitle: 'In the heart of Chalandri.',
+    locText: '[ACCESS: distance to the metro, main roads, parking]',
+    locLink: 'Map & access',
+    mapLabel: 'Chalandri',
+    ctaTitle: ['Interested', 'in a building?'],
+    ctaAllLeased: "All buildings are currently leased. Leave us your details and we'll contact you when one becomes available.",
+    ctaOpen: "Tell us what your business needs and we'll get back to you.",
+    ctaButton: 'Register your interest',
+  },
+}[lang];
+---
+<Base title={copy.title} description={copy.description} lang={lang} page="home">
+  <!-- Hero -->
+  <section class="hero wrap" data-hero>
+    <div class="hero__text">
+      <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">—</span><span class="eyebrow__rule"></span>{copy.place}</p>
+      <h1 class="t-display" data-lines style="--delay:900ms">
+        {copy.hero.map((l) => <span class="mask"><span>{l}</span></span>)}
+      </h1>
+      <p class="t-lead" data-reveal style="--i:14">{copy.lead}</p>
+      <div class="hero__ctas" data-reveal style="--i:16">
+        <a class="btn" href={path('buildings', lang)}>{copy.seeBuildings} <span class="btn__arrow" aria-hidden="true">→</span></a>
+        <a class="link" href={path('contact', lang)}>{copy.contact}</a>
+      </div>
+    </div>
+    <div class="hero__art"><BuildingsDrawing letters={buildings.map((b) => b.letter[lang])} /></div>
+  </section>
+
+  <!-- Key numbers -->
+  <section class="wrap numbers-wrap" aria-label={copy.numbersLabel}>
+    <hr class="rule" data-rule />
+    <dl class="numbers" data-reveal-group>
+      <div data-reveal><dt class="t-label muted">{copy.nBuildings}</dt><dd class="t-h1 num">{buildings.length}</dd></div>
+      <div data-reveal><dt class="t-label muted">{copy.since}</dt><dd class="t-h1 num">2018</dd></div>
+      <div data-reveal><dt class="t-label muted">{copy.totalArea}</dt><dd class="t-h1 num" data-count={totalArea}>{fmt(totalArea, lang)}</dd></div>
+      {allLeased
+        ? <div data-reveal><dt class="t-label muted">{copy.leased}</dt><dd class="t-h1 num"><span data-count="100">100</span>%</dd></div>
+        : <div data-reveal><dt class="t-label muted">{copy.available}</dt><dd class="t-h1 num">{buildings.length - leasedCount}</dd></div>}
+    </dl>
+    <hr class="rule" data-rule />
+  </section>
+
+  <!-- 01 Buildings -->
+  <section class="section" aria-labelledby="buildings-title">
+    <div class="wrap">
+      <div class="grid head">
+        <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">01</span><span class="eyebrow__rule"></span>{copy.bEyebrow}</p>
+        <h2 class="t-h2" id="buildings-title" data-reveal>{copy.bTitle}</h2>
+        <p class="t-body muted" data-reveal>{copy.bText}</p>
+      </div>
+
+      <ul class="buildings" data-reveal-group>
+        {buildings.map((b) => (
+          <li class="building" data-reveal>
+            <a class="building__link" href={`${path('buildings', lang)}#building-${b.id}`}>
+              <div class="building__art"><BuildingElevation shape={b.shape} /></div>
+              <div class="building__head">
+                <span class="building__letter t-display">{b.letter[lang]}</span>
+                <span class="building__title">
+                  <span class="t-h3">{b.label[lang]}</span>
+                  <span class="t-small">{b.use[lang]}</span>
+                </span>
+              </div>
+              <dl class="building__facts">
+                <div><dt class="t-label muted">{copy.floors}</dt><dd class="num">{b.floors}</dd></div>
+                <div><dt class="t-label muted">{copy.area}</dt><dd class="num">{fmt(b.area, lang)} m²</dd></div>
+                <div><dt class="t-label muted">{copy.status}</dt><dd><span class:list={['status', statusClass(b)]}>{statusLabel(b, lang)}</span></dd></div>
+              </dl>
+              <span class="text-cta">{copy.details} <span class="btn__arrow" aria-hidden="true">→</span></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="t-small muted sample-note">{copy.sample}</p>
+    </div>
+  </section>
+
+  <!-- 02 Why us -->
+  <section class="section section--ink" aria-labelledby="why-title">
+    <div class="wrap grid why">
+      <div class="why__head">
+        <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">02</span><span class="eyebrow__rule"></span>{copy.whyEyebrow}</p>
+        <h2 class="t-h2" id="why-title" data-reveal>{copy.whyTitle}</h2>
+      </div>
+      <ol class="why__list" data-reveal-group>
+        {copy.reasons.map((r, i) => (
+          <li data-reveal>
+            <span class="t-label why__num num">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3 class="t-h3">{r.title}</h3>
+              <p class="t-small">{r.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 03 Location -->
+  <section class="section section--stone" aria-labelledby="loc-title">
+    <div class="wrap grid location">
+      <div class="location__text">
+        <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">03</span><span class="eyebrow__rule"></span>{copy.locEyebrow}</p>
+        <h2 class="t-h2" id="loc-title" data-reveal>{copy.locTitle}</h2>
+        <p class="t-body muted" data-reveal>{copy.locText}</p>
+        <address class="location__address t-lead" data-reveal>{COMPANY.address[lang]}</address>
+        <a class="text-cta" href={path('location', lang)} data-reveal>{copy.locLink} <span class="btn__arrow" aria-hidden="true">→</span></a>
+      </div>
+      <div class="location__map"><AreaMap label={copy.mapLabel} /></div>
+    </div>
+  </section>
+
+  <!-- Closing CTA -->
+  <section class="section closing" aria-labelledby="cta-title">
+    <div class="wrap">
+      <h2 class="t-h1 closing__title" id="cta-title" data-lines>
+        {copy.ctaTitle.map((l) => <span class="mask"><span>{l}</span></span>)}
+      </h2>
+      <div class="grid closing__body">
+        <p class="t-lead" data-reveal>{allLeased ? copy.ctaAllLeased : copy.ctaOpen}</p>
+        <div class="closing__actions" data-reveal>
+          <a class="btn" href={path('contact', lang)}>{copy.ctaButton} <span class="btn__arrow" aria-hidden="true">→</span></a>
+          <a class="link" href={COMPANY.phoneHref}>{COMPANY.phone}</a>
+          <a class="link" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Hero */
+  .hero {
+    min-height: 100svh;
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter);
+    align-items: center;
+    padding-top: calc(var(--header-h) + var(--s-8));
+    padding-bottom: var(--s-9);
+  }
+  .hero__text { grid-column: 1 / span 6; display: grid; gap: var(--s-6); }
+  .hero__art { grid-column: 7 / -1; }
+  .hero__ctas { display: flex; align-items: center; gap: var(--s-6); flex-wrap: wrap; margin-top: var(--s-4); }
+
+  /* Numbers */
+  .numbers-wrap { padding-bottom: var(--s-6); }
+  .numbers { display: grid; grid-template-columns: repeat(4, 1fr); padding-block: var(--s-7); }
+  .numbers > div { display: grid; gap: var(--s-3); padding-right: var(--s-5); }
+  .numbers > div + div { border-left: 1px solid var(--hairline); padding-left: var(--s-6); }
+
+  /* Section heads */
+  .head { row-gap: var(--s-5); margin-bottom: var(--s-9); align-items: end; }
+  .head .eyebrow { grid-column: 1 / -1; }
+  .head .t-h2 { grid-column: 1 / span 6; }
+  .head .t-body { grid-column: 8 / span 5; }
+
+  /* Buildings */
+  .buildings { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gutter); }
+  .building__link { display: grid; gap: var(--s-6); height: 100%; padding-bottom: var(--s-6); border-bottom: 1px solid var(--hairline); }
+  .building__art {
+    background: var(--stone); padding: var(--s-7) var(--s-7) var(--s-5);
+    color: var(--ink); transition: background-color var(--dur-base) var(--ease-out);
+  }
+  .building__link:hover .building__art { background: color-mix(in srgb, var(--stone) 70%, var(--hairline)); }
+  .building__head { display: flex; align-items: baseline; gap: var(--s-5); }
+  .building__letter { font-size: clamp(3rem, 5vw, 4.5rem); line-height: 0.8; color: var(--bronze); }
+  .building__title { display: grid; gap: var(--s-1); }
+  .building__facts { display: grid; border-top: 1px solid var(--hairline); }
+  .building__facts > div { display: flex; justify-content: space-between; align-items: center; gap: var(--s-4); padding-block: var(--s-3); border-bottom: 1px solid var(--hairline); }
+  .building__facts dd { font-size: var(--fs-small); }
+  .building__link .text-cta { justify-self: start; }
+  .building__link:hover .btn__arrow { transform: translateX(4px); }
+  .sample-note { margin-top: var(--s-6); }
+
+  /* Why */
+  .why { row-gap: var(--s-8); }
+  .why__head { grid-column: 1 / span 5; display: grid; gap: var(--s-5); align-content: start; }
+  .why__list { grid-column: 7 / -1; list-style: none; padding: 0; }
+  .why__list li {
+    display: grid; grid-template-columns: 56px 1fr; gap: var(--s-5);
+    padding-block: var(--s-6); border-bottom: 1px solid var(--ink-hairline);
+  }
+  .why__list li:first-child { border-top: 1px solid var(--ink-hairline); }
+  .why__list .t-small { margin-top: var(--s-2); max-width: 34em; }
+  .why__num { color: var(--bronze); padding-top: 0.6em; }
+
+  /* Location */
+  .location { row-gap: var(--s-8); align-items: center; }
+  .location__text { grid-column: 1 / span 5; display: grid; gap: var(--s-5); justify-items: start; }
+  .location__address { font-style: normal; color: var(--ink); margin-top: var(--s-4); }
+  .location__map { grid-column: 7 / -1; color: var(--ink); }
+
+  /* Closing */
+  .closing__title { margin-bottom: var(--s-8); }
+  .closing__body { row-gap: var(--s-6); align-items: end; }
+  .closing__body .t-lead { grid-column: 1 / span 6; }
+  .closing__actions { grid-column: 8 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-5) var(--s-6); }
+
+  @media (max-width: 960px) {
+    .hero { min-height: auto; row-gap: var(--s-8); }
+    .hero__text, .hero__art { grid-column: 1 / -1; }
+    .hero__art { order: -1; max-width: 520px; }
+    .numbers { grid-template-columns: 1fr 1fr; row-gap: var(--s-7); }
+    .numbers > div:nth-child(3) { border-left: 0; padding-left: 0; }
+    .head .t-h2, .head .t-body { grid-column: 1 / -1; }
+    .buildings { grid-template-columns: minmax(0, 1fr); gap: var(--s-8); }
+    .building__art { padding: var(--s-6) var(--s-5) var(--s-4); }
+    .building__art :global(svg) { width: auto; max-width: 100%; height: 240px; margin-inline: auto; }
+    .why__head, .why__list, .location__text, .location__map,
+    .closing__body .t-lead, .closing__actions { grid-column: 1 / -1; }
+  }
+  @media (max-width: 760px) {
+    .closing { padding-bottom: calc(var(--section-y) + 56px); }
+  }
+</style>

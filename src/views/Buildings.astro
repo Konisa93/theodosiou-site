@@ -1,0 +1,183 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+import BuildingElevation from '../components/BuildingElevation.astro';
+import { buildings, fmt, allLeased, statusLabel, statusClass } from '../lib/buildings';
+import { path, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const contact = path('contact', lang);
+
+const copy = {
+  el: {
+    title: 'Τα κτίρια · Θεοδοσίου Τεχνική Α.Ε.',
+    description: 'Τρία αυτοτελή εμπορικά κτίρια στο Χαλάνδρι. Κάθε κτίριο μισθώνεται ολόκληρο, σε έναν μισθωτή.',
+    eyebrow: 'Τα κτίρια',
+    lines: ['Τρία κτίρια,', 'ολόκληρα για εσάς.'],
+    lead: 'Κάθε κτίριο μισθώνεται ολόκληρο σε έναν μισθωτή, απευθείας από την ιδιοκτήτρια εταιρεία.',
+    notice: 'Όλα τα κτίρια είναι αυτή τη στιγμή μισθωμένα. Αφήστε μας τα στοιχεία σας και θα επικοινωνήσουμε μαζί σας όταν κάποιο διατεθεί.',
+    noticeLink: 'Εκδήλωση ενδιαφέροντος',
+    use: 'Χρήση', floors: 'Όροφοι', area: 'Εμβαδόν κτιρίου', areaShort: 'Εμβαδόν', plot: 'Οικόπεδο', status: 'Κατάσταση', building: 'Κτίριο',
+    interestedIn: (label: string) => `Ενδιαφέρομαι για το ${label}`,
+    interested: 'Ενδιαφέρομαι',
+    action: 'Ενέργεια',
+    summaryEyebrow: 'Συνοπτικά',
+    summaryTitle: 'Όλα τα κτίρια με μια ματιά.',
+    caption: 'Σύνοψη των τριών κτιρίων',
+    sample: 'Δείγμα στοιχείων: εμβαδά, όροφοι και διευθύνσεις θα αντικατασταθούν με τα πραγματικά.',
+  },
+  en: {
+    title: 'The buildings · Theodosiou Texniki AE',
+    description: 'Three standalone commercial buildings in Chalandri, Athens. Each building is leased as a whole, to a single tenant.',
+    eyebrow: 'The buildings',
+    lines: ['Three buildings,', 'each one entirely yours.'],
+    lead: 'Each building is leased as a whole to a single tenant, directly from the owning company.',
+    notice: "All buildings are currently leased. Leave us your details and we'll contact you when one becomes available.",
+    noticeLink: 'Register your interest',
+    use: 'Use', floors: 'Floors', area: 'Building area', areaShort: 'Area', plot: 'Plot', status: 'Status', building: 'Building',
+    interestedIn: (label: string) => `I'm interested in ${label}`,
+    interested: "I'm interested",
+    action: 'Action',
+    summaryEyebrow: 'Summary',
+    summaryTitle: 'All buildings at a glance.',
+    caption: 'Summary of the three buildings',
+    sample: 'Sample figures: areas, floors and addresses will be replaced with the real ones.',
+  },
+}[lang];
+---
+<Base title={copy.title} description={copy.description} lang={lang} page="buildings">
+  <PageIntro eyebrow={copy.eyebrow} lines={copy.lines} lead={copy.lead}>
+    {allLeased && (
+      <p class="notice t-small" data-reveal style="--i:8">
+        <span class="status status--rented" aria-hidden="true"></span>
+        {copy.notice}
+        <a class="link" href={contact}>{copy.noticeLink}</a>
+      </p>
+    )}
+  </PageIntro>
+
+  <!-- One block per building -->
+  {buildings.map((b, i) => (
+    <section class="section building-block" id={`building-${b.id}`} aria-labelledby={`title-${b.id}`}>
+      <div class="wrap grid">
+        <div class:list={['bb__art', { 'bb__art--right': i % 2 === 1 }]}>
+          <BuildingElevation shape={b.shape} />
+        </div>
+        <div class:list={['bb__text', { 'bb__text--left': i % 2 === 1 }]}>
+          <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">{String(i + 1).padStart(2, '0')}</span><span class="eyebrow__rule"></span>{b.use[lang]}</p>
+          <h2 class="bb__title" id={`title-${b.id}`} data-reveal>
+            <span class="bb__letter t-display">{b.letter[lang]}</span>
+            <span class="t-h2">{b.label[lang]}</span>
+          </h2>
+          <p class="t-body muted" data-reveal>{b.address[lang]}</p>
+
+          <dl class="facts" data-reveal>
+            <div><dt class="t-label muted">{copy.use}</dt><dd>{b.use[lang]}</dd></div>
+            <div><dt class="t-label muted">{copy.floors}</dt><dd class="num">{b.floors}</dd></div>
+            <div><dt class="t-label muted">{copy.area}</dt><dd class="num">{fmt(b.area, lang)} m²</dd></div>
+            <div><dt class="t-label muted">{copy.plot}</dt><dd class="num">{fmt(b.plot, lang)} m²</dd></div>
+            <div><dt class="t-label muted">{copy.status}</dt><dd><span class:list={['status', statusClass(b)]}>{statusLabel(b, lang)}</span></dd></div>
+          </dl>
+
+          <ul class="features" data-reveal>
+            {b.features[lang].map((f) => <li class="t-small">{f}</li>)}
+          </ul>
+
+          <a class="btn btn--outline" href={`${contact}?building=${b.id}`} data-reveal>
+            {copy.interestedIn(b.label[lang])} <span class="btn__arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <!-- Summary table -->
+  <section class="section section--stone" aria-labelledby="summary-title">
+    <div class="wrap">
+      <div class="grid head">
+        <p class="eyebrow t-label" data-reveal><span class="eyebrow__num">04</span><span class="eyebrow__rule"></span>{copy.summaryEyebrow}</p>
+        <h2 class="t-h2" id="summary-title" data-reveal>{copy.summaryTitle}</h2>
+      </div>
+      <table class="spaces" data-reveal>
+        <caption class="visually-hidden">{copy.caption}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{copy.building}</th>
+            <th scope="col">{copy.use}</th>
+            <th scope="col" class="is-num">{copy.floors}</th>
+            <th scope="col" class="is-num">{copy.areaShort}</th>
+            <th scope="col" class="is-num">{copy.plot}</th>
+            <th scope="col">{copy.status}</th>
+            <th scope="col"><span class="visually-hidden">{copy.action}</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          {buildings.map((b) => (
+            <tr>
+              <th scope="row" data-label={copy.building} class="code"><a class="link" href={`#building-${b.id}`}>{b.label[lang]}</a></th>
+              <td data-label={copy.use}>{b.use[lang]}</td>
+              <td data-label={copy.floors} class="is-num">{b.floors}</td>
+              <td data-label={copy.areaShort} class="is-num">{fmt(b.area, lang)} m²</td>
+              <td data-label={copy.plot} class="is-num">{fmt(b.plot, lang)} m²</td>
+              <td data-label={copy.status}><span class:list={['status', statusClass(b)]}>{statusLabel(b, lang)}</span></td>
+              <td><a class="btn btn--outline btn--small" href={`${contact}?building=${b.id}`}>{copy.interested} <span class="btn__arrow" aria-hidden="true">→</span></a></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="t-small muted sample-note">{copy.sample}</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .notice {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-3);
+    max-width: 52em; padding: var(--s-5) var(--s-6);
+    border: 1px solid var(--hairline); color: var(--graphite);
+  }
+  .notice .link { color: var(--ink); }
+
+  .building-block + .building-block { padding-top: 0; }
+  .bb__art {
+    grid-column: 1 / span 5; align-self: start;
+    background: var(--stone); padding: var(--s-8) var(--s-8) var(--s-6);
+    position: sticky; top: calc(var(--header-h-compact) + var(--s-6));
+  }
+  .bb__art :global(svg) { max-height: 420px; width: auto; max-width: 100%; margin-inline: auto; }
+  .bb__text { grid-column: 7 / -1; display: grid; gap: var(--s-6); justify-items: start; }
+  .bb__art--right { grid-column: 8 / -1; grid-row: 1; }
+  .bb__text--left { grid-column: 1 / span 6; grid-row: 1; }
+  .bb__title { display: flex; align-items: baseline; gap: var(--s-5); }
+  .bb__letter { color: var(--bronze); line-height: 0.8; }
+
+  .facts { width: 100%; border-top: 1px solid var(--ink); }
+  .facts > div {
+    display: flex; justify-content: space-between; align-items: center; gap: var(--s-4);
+    padding-block: var(--s-4); border-bottom: 1px solid var(--hairline);
+  }
+  .features { list-style: none; padding: 0; display: grid; gap: var(--s-2); }
+  .features li { display: flex; gap: var(--s-3); color: var(--graphite); }
+  .features li::before { content: ''; width: 16px; height: 1px; background: var(--bronze); margin-top: 0.8em; flex: none; }
+
+  .head { row-gap: var(--s-5); margin-bottom: var(--s-8); }
+  .head .eyebrow { grid-column: 1 / -1; }
+  .head .t-h2 { grid-column: 1 / span 7; }
+  .spaces th[scope='row'] { text-align: left; font-weight: 500; font-size: var(--fs-small); color: var(--ink); text-transform: none; letter-spacing: 0.02em; border-bottom: 1px solid var(--hairline); padding: var(--s-5) var(--s-4) var(--s-5) 0; }
+  .sample-note { margin-top: var(--s-6); }
+
+  @media (max-width: 960px) {
+    .bb__art, .bb__art--right, .bb__text, .bb__text--left { grid-column: 1 / -1; grid-row: auto; }
+    .bb__art { position: static; padding: var(--s-6); margin-bottom: var(--s-7); }
+    .bb__art :global(svg) { max-height: 260px; }
+    .head .t-h2 { grid-column: 1 / -1; }
+  }
+  @media (max-width: 760px) {
+    .spaces th[scope='row'] { display: flex; justify-content: space-between; width: 100%; padding: var(--s-2) 0; border: 0; font-size: var(--fs-body); }
+    .spaces th[scope='row']::before {
+      content: attr(data-label); color: var(--graphite); font-size: var(--fs-label);
+      letter-spacing: var(--track-label); text-transform: uppercase; font-weight: 500;
+    }
+  }
+</style>

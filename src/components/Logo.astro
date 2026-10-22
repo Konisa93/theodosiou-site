@@ -1,0 +1,52 @@
+---
+// Wordmark + mark. The mark: three blocks of different heights, one per building.
+interface Props {
+  lang?: 'el' | 'en';
+  variant?: 'full' | 'mark' | 'wordmark';
+  accent?: boolean;   // middle block in bronze
+  sub?: boolean;      // show "ΤΕΧΝΙΚΗ Α.Ε." line
+  size?: number;      // mark height in px
+  class?: string;
+}
+const { lang = 'el', variant = 'full', accent = false, sub = true, size = 30, class: cls = '' } = Astro.props;
+const name = lang === 'el' ? 'Θεοδοσίου' : 'Theodosiou';
+const subline = lang === 'el' ? 'Τεχνική Α.Ε.' : 'Texniki AE';
+---
+<span class:list={['logo', `logo--${variant}`, cls]} style={`--mark:${size}px`} lang={lang}>
+  {variant !== 'wordmark' && (
+    <svg class="logo__mark" viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="5" y="14" width="6" height="14" fill="currentColor" />
+      <rect x="13" y="4" width="6" height="24" fill={accent ? 'var(--bronze)' : 'currentColor'} />
+      <rect x="21" y="10" width="6" height="18" fill="currentColor" />
+    </svg>
+  )}
+  {variant !== 'mark' && (
+    <span class="logo__text">
+      <span class="logo__name">{name}</span>
+      {sub && <span class="logo__sub">{subline}</span>}
+    </span>
+  )}
+  {variant === 'mark' && <span class="visually-hidden">{name}</span>}
+</span>
+
+<style>
+  .logo { display: inline-flex; align-items: center; gap: calc(var(--mark) * 0.42); line-height: 1; }
+  .logo__mark { width: var(--mark); height: var(--mark); flex: none; }
+  .logo__text { display: flex; flex-direction: column; gap: calc(var(--mark) * 0.2); }
+  .logo__name {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: calc(var(--mark) * 0.62);
+    letter-spacing: var(--track-wordmark);
+    text-transform: uppercase;
+    margin-right: calc(-1 * var(--track-wordmark));
+  }
+  .logo__sub {
+    font-family: var(--font-text);
+    font-size: max(9px, calc(var(--mark) * 0.3));
+    font-weight: 500;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+</style>

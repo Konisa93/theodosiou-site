@@ -1,0 +1,30 @@
+---
+// Abstract map of the area: a few street lines and one marker. Not a real map.
+interface Props { label?: string; class?: string; }
+const { label = 'Χαλάνδρι', class: cls = '' } = Astro.props;
+const minor = [
+  'M0 90H600', 'M0 170H600', 'M0 250H600', 'M0 330H600',
+  'M90 0V420', 'M200 0V420', 'M330 0V420', 'M450 0V420', 'M540 0V420',
+];
+---
+<svg class:list={['area-map', cls]} viewBox="0 0 600 420" fill="none" stroke="currentColor" aria-hidden="true" data-draw>
+  {minor.map((d, i) => <path class="d faint" d={d} pathLength="1" stroke-width="0.5" style={`--d:${i * 70}`} />)}
+  <path class="d" d="M-20 400C140 330 250 250 330 190S520 40 620 10" pathLength="1" stroke-width="1.5" style="--d:500" />
+  <path class="d" d="M0 300C160 290 300 260 620 280" pathLength="1" stroke-width="1" style="--d:750" />
+  <g class="marker">
+    <circle class="d" cx="330" cy="190" r="26" pathLength="1" stroke-width="0.75" style="--d:1200" />
+    <circle class="f" cx="330" cy="190" r="5" fill="currentColor" stroke="none" style="--d:1500" />
+  </g>
+  <text class="f label" x="366" y="186" style="--d:1700">{label}</text>
+</svg>
+
+<style>
+  .area-map { width: 100%; height: auto; }
+  .faint { opacity: 0.3; }
+  .marker { color: var(--bronze); }
+  .label {
+    fill: currentColor; stroke: none;
+    font-family: var(--font-text); font-size: 12px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase;
+  }
+</style>

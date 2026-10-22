@@ -1,0 +1,132 @@
+{
+  "_note": "SAMPLE DATA. Replace with the client real figures. Never add tenant names. availableFrom is an ISO date (YYYY-MM-DD) when status is available_from.",
+  "buildings": [
+    {
+      "id": "a",
+      "label": {
+        "el": "Κτίριο Α",
+        "en": "Building A"
+      },
+      "letter": {
+        "el": "Α",
+        "en": "A"
+      },
+      "address": {
+        "el": "[ΔΙΕΥΘΥΝΣΗ Α], Χαλάνδρι",
+        "en": "[ADDRESS A], Chalandri"
+      },
+      "use": {
+        "el": "Εμπορικό κτίριο",
+        "en": "Commercial building"
+      },
+      "floors": 3,
+      "area": 1250,
+      "plot": 900,
+      "status": "leased",
+      "availableFrom": null,
+      "shape": {
+        "w": 130,
+        "h": 160,
+        "floors": 5,
+        "cols": 4
+      },
+      "features": {
+        "el": [
+          "[Πρόσοψη σε κεντρικό δρόμο]",
+          "[Θέσεις στάθμευσης]",
+          "[Ενεργειακή κλάση]"
+        ],
+        "en": [
+          "[Frontage on main road]",
+          "[Parking spaces]",
+          "[Energy class]"
+        ]
+      }
+    },
+    {
+      "id": "b",
+      "label": {
+        "el": "Κτίριο Β",
+        "en": "Building B"
+      },
+      "letter": {
+        "el": "Β",
+        "en": "B"
+      },
+      "address": {
+        "el": "[ΔΙΕΥΘΥΝΣΗ Β], Χαλάνδρι",
+        "en": "[ADDRESS B], Chalandri"
+      },
+      "use": {
+        "el": "Εμπορικό κτίριο",
+        "en": "Commercial building"
+      },
+      "floors": 4,
+      "area": 1850,
+      "plot": 1100,
+      "status": "leased",
+      "availableFrom": null,
+      "shape": {
+        "w": 150,
+        "h": 256,
+        "floors": 8,
+        "cols": 5,
+        "roof": true
+      },
+      "features": {
+        "el": [
+          "[Πρόσοψη σε κεντρικό δρόμο]",
+          "[Θέσεις στάθμευσης]",
+          "[Ενεργειακή κλάση]"
+        ],
+        "en": [
+          "[Frontage on main road]",
+          "[Parking spaces]",
+          "[Energy class]"
+        ]
+      }
+    },
+    {
+      "id": "g",
+      "label": {
+        "el": "Κτίριο Γ",
+        "en": "Building C"
+      },
+      "letter": {
+        "el": "Γ",
+        "en": "C"
+      },
+      "address": {
+        "el": "[ΔΙΕΥΘΥΝΣΗ Γ], Χαλάνδρι",
+        "en": "[ADDRESS C], Chalandri"
+      },
+      "use": {
+        "el": "Εμπορικό κτίριο",
+        "en": "Commercial building"
+      },
+      "floors": 3,
+      "area": 1750,
+      "plot": 1000,
+      "status": "leased",
+      "availableFrom": null,
+      "shape": {
+        "w": 120,
+        "h": 200,
+        "floors": 6,
+        "cols": 3
+      },
+      "features": {
+        "el": [
+          "[Πρόσοψη σε κεντρικό δρόμο]",
+          "[Θέσεις στάθμευσης]",
+          "[Ενεργειακή κλάση]"
+        ],
+        "en": [
+          "[Frontage on main road]",
+          "[Parking spaces]",
+          "[Energy class]"
+        ]
+      }
+    }
+  ]
+}

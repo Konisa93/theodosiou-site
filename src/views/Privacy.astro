@@ -1,0 +1,67 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+import { COMPANY } from '../lib/buildings';
+import type { Lang } from '../i18n/ui';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+
+// Draft for the client's legal review. Not legal advice.
+const copy = {
+  el: {
+    title: 'Πολιτική Απορρήτου · Θεοδοσίου Τεχνική Α.Ε.',
+    eyebrow: 'Πολιτική Απορρήτου',
+    lines: ['Τα στοιχεία σας,', 'με προσοχή.'],
+    lead: 'Τελευταία ενημέρωση: [ΗΜΕΡΟΜΗΝΙΑ]',
+    sections: [
+      { h: 'Υπεύθυνος επεξεργασίας', p: `ΘΕΟΔΟΣΙΟΥ ΤΕΧΝΙΚΗ Α.Ε., ${COMPANY.address.el}, ${COMPANY.postcode.el}. ΓΕΜΗ [—], ΑΦΜ [—]. Email: ${COMPANY.email}, τηλ. ${COMPANY.phone}.` },
+      { h: 'Ποια δεδομένα συλλέγουμε', p: 'Μόνο όσα μας δίνετε στη φόρμα επικοινωνίας: ονοματεπώνυμο, εταιρεία, email, τηλέφωνο, το κτίριο που σας ενδιαφέρει και το μήνυμά σας.' },
+      { h: 'Γιατί τα χρησιμοποιούμε', p: 'Για να απαντήσουμε στο αίτημά σας και, αν το ζητήσετε, να σας ενημερώσουμε όταν κάποιο κτίριο διατεθεί. Νομική βάση είναι η συγκατάθεσή σας (άρθρο 6 παρ. 1α ΓΚΠΔ).' },
+      { h: 'Πόσο καιρό τα κρατάμε', p: '[ΔΙΑΣΤΗΜΑ, π.χ. έως 24 μήνες] ή μέχρι να ζητήσετε τη διαγραφή τους.' },
+      { h: 'Ποιος έχει πρόσβαση', p: 'Τα μηνύματα παραλαμβάνονται μέσω της υπηρεσίας φιλοξενίας του ιστότοπου [Netlify / Formspree] και αποστέλλονται στο email της εταιρείας. Δεν πωλούμε ούτε μοιραζόμαστε τα στοιχεία σας για διαφημιστικούς σκοπούς.' },
+      { h: 'Cookies', p: 'Ο ιστότοπος δεν χρησιμοποιεί cookies παρακολούθησης. Για στατιστικά επισκεψιμότητας χρησιμοποιούμε υπηρεσία χωρίς cookies, που δεν αναγνωρίζει προσωπικά τους επισκέπτες. Ο χάρτης του OpenStreetMap φορτώνει μόνο αν τον ζητήσετε.' },
+      { h: 'Τα δικαιώματά σας', p: 'Έχετε δικαίωμα πρόσβασης, διόρθωσης, διαγραφής, περιορισμού και φορητότητας των δεδομένων σας, καθώς και ανάκλησης της συγκατάθεσής σας. Γράψτε μας στο email παραπάνω. Μπορείτε επίσης να υποβάλετε καταγγελία στην Αρχή Προστασίας Δεδομένων Προσωπικού Χαρακτήρα (www.dpa.gr).' },
+    ],
+  },
+  en: {
+    title: 'Privacy Policy · Theodosiou Texniki AE',
+    eyebrow: 'Privacy Policy',
+    lines: ['Your details,', 'handled with care.'],
+    lead: 'Last updated: [DATE]',
+    sections: [
+      { h: 'Data controller', p: `THEODOSIOU TEXNIKI AE, ${COMPANY.address.en}, ${COMPANY.postcode.en}. GEMI [—], VAT [—]. Email: ${COMPANY.email}, tel. ${COMPANY.phone}.` },
+      { h: 'What data we collect', p: 'Only what you give us in the contact form: full name, company, email, phone, the building you are interested in and your message.' },
+      { h: 'Why we use it', p: 'To reply to your request and, if you ask us to, to let you know when a building becomes available. The legal basis is your consent (Article 6(1)(a) GDPR).' },
+      { h: 'How long we keep it', p: '[PERIOD, e.g. up to 24 months] or until you ask us to delete it.' },
+      { h: 'Who has access', p: "Messages are received through the website's hosting service [Netlify / Formspree] and forwarded to the company's email. We do not sell or share your details for advertising purposes." },
+      { h: 'Cookies', p: 'This website does not use tracking cookies. For visitor statistics we use a cookie-free service that does not identify individual visitors. The OpenStreetMap map loads only if you ask for it.' },
+      { h: 'Your rights', p: 'You have the right to access, correct, delete, restrict and port your data, and to withdraw your consent. Email us at the address above. You can also lodge a complaint with the Hellenic Data Protection Authority (www.dpa.gr).' },
+    ],
+  },
+}[lang];
+---
+<Base title={copy.title} lang={lang} page="privacy">
+  <PageIntro eyebrow={copy.eyebrow} lines={copy.lines} lead={copy.lead} />
+  <section class="section">
+    <div class="wrap grid">
+      <div class="policy">
+        {copy.sections.map((s, i) => (
+          <section class="policy__item">
+            <h2 class="t-h3"><span class="policy__num t-label num">{String(i + 1).padStart(2, '0')}</span>{s.h}</h2>
+            <p class="t-body muted">{s.p}</p>
+          </section>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .policy { grid-column: 3 / span 8; display: grid; }
+  .policy__item { display: grid; gap: var(--s-4); padding-block: var(--s-7); border-bottom: 1px solid var(--hairline); }
+  .policy__item:first-child { border-top: 1px solid var(--ink); }
+  .policy__item h2 { display: flex; align-items: baseline; gap: var(--s-5); }
+  .policy__num { color: var(--bronze); }
+  @media (max-width: 960px) { .policy { grid-column: 1 / -1; } }
+</style>

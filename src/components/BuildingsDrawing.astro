@@ -1,0 +1,62 @@
+---
+// Abstract elevation of the three buildings. Every stroke uses pathLength="1"
+// so it can be drawn in with stroke-dashoffset (see [data-draw] in global.css).
+interface Props { class?: string; labels?: boolean; letters?: string[]; }
+const { class: cls = '', labels = true, letters = ['Α', 'Β', 'Γ'] } = Astro.props;
+
+const ground = 340;
+const buildings = [
+  { id: letters[0], x: 70, w: 130, h: 160, floors: 5, cols: 4, delay: 250 },
+  { id: letters[1], x: 230, w: 150, h: 256, floors: 8, cols: 5, delay: 450, roof: true },
+  { id: letters[2], x: 410, w: 120, h: 200, floors: 6, cols: 3, delay: 650 },
+];
+
+const paths = [];
+for (const b of buildings) {
+  const top = ground - b.h;
+  paths.push({ d: `M${b.x} ${ground}V${top}H${b.x + b.w}V${ground}`, delay: b.delay, w: 1.25 });
+  if (b.roof) paths.push({ d: `M${b.x + 34} ${top}V${top - 16}H${b.x + b.w - 34}V${top}`, delay: b.delay + 500, w: 1 });
+  for (let i = 1; i < b.floors; i++) {
+    const y = Math.round(ground - (i * b.h) / b.floors);
+    paths.push({ d: `M${b.x} ${y}H${b.x + b.w}`, delay: b.delay + 300 + i * 60, w: 0.75, faint: true });
+  }
+  for (let j = 1; j < b.cols; j++) {
+    const x = Math.round(b.x + (j * b.w) / b.cols);
+    paths.push({ d: `M${x} ${top + 6}V${ground}`, delay: b.delay + 700 + j * 50, w: 0.5, faint: true });
+  }
+}
+const hatch = [];
+for (let x = 28; x <= 576; x += 12) hatch.push(`M${x} ${ground}l-8 10`);
+const datumA = ground - buildings[0].h;
+const dimY = ground - buildings[1].h - 40;
+---
+<svg class:list={['buildings', cls]} viewBox="0 0 600 390" fill="none" stroke="currentColor" aria-hidden="true" data-draw>
+  <!-- datum lines -->
+  <path class="d faint" d={`M20 ${datumA}H580`} pathLength="1" stroke-width="0.5" style="--d:1300" />
+  <!-- ground -->
+  <path class="d" d={`M20 ${ground}H580`} pathLength="1" stroke-width="1.25" style="--d:0" />
+  <path class="f faint" d={hatch.join('')} stroke-width="0.5" style="--d:600" />
+  {paths.map((p) => (
+    <path class:list={['d', { faint: p.faint }]} d={p.d} pathLength="1" stroke-width={p.w} style={`--d:${p.delay}`} />
+  ))}
+  <!-- dimension line over building B -->
+  <g class="accent">
+    <path class="d" d={`M230 ${dimY}H380`} pathLength="1" stroke-width="0.75" style="--d:1500" />
+    <path class="f" d={`M226 ${dimY + 4}l8 -8M376 ${dimY + 4}l8 -8M230 ${dimY - 8}v16M380 ${dimY - 8}v16`} stroke-width="0.75" style="--d:1900" />
+  </g>
+  {labels && buildings.map((b) => (
+    <text class="f label" x={b.x + b.w / 2} y={ground + 38} text-anchor="middle" style={`--d:${b.delay + 1300}`}>{b.id}</text>
+  ))}
+</svg>
+
+<style>
+  .buildings { width: 100%; height: auto; overflow: visible; }
+  .faint { opacity: 0.38; }
+  :global(.js) [data-draw] .f.faint { opacity: 0; }
+  :global(.js) [data-draw].is-in .f.faint { opacity: 0.38; }
+  .accent { color: var(--bronze); }
+  .label {
+    fill: currentColor; stroke: none;
+    font-family: var(--font-text); font-size: 13px; font-weight: 500; letter-spacing: 0.2em;
+  }
+</style>

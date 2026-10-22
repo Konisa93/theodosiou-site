@@ -1,0 +1,53 @@
+---
+// Mobile-only bottom bar. Appears after the hero, hides near the footer.
+import { path, type Lang } from '../i18n/ui';
+import { COMPANY } from '../lib/buildings';
+
+interface Props { lang?: Lang; }
+const { lang = 'el' } = Astro.props;
+const el = lang === 'el';
+---
+<div class="sticky-cta" data-sticky-cta aria-hidden="true">
+  <a class="sticky-cta__item" href={path('buildings', lang)} tabindex="-1">{el ? 'Κτίρια' : 'Buildings'}</a>
+  <a class="sticky-cta__item sticky-cta__item--primary" href={COMPANY.phoneHref} tabindex="-1">{el ? 'Κλήση' : 'Call'}</a>
+</div>
+
+<style>
+  .sticky-cta { display: none; }
+  @media (max-width: 760px) {
+    .sticky-cta {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+      display: grid; grid-template-columns: 1fr 1fr;
+      background: var(--paper); border-top: 1px solid var(--hairline);
+      padding-bottom: env(safe-area-inset-bottom);
+      transform: translateY(100%);
+      transition: transform var(--dur-base) var(--ease-out);
+    }
+    .sticky-cta.is-visible { transform: none; }
+  }
+  .sticky-cta__item {
+    display: flex; align-items: center; justify-content: center; min-height: 56px;
+    font-size: var(--fs-label); font-weight: 500; letter-spacing: var(--track-label); text-transform: uppercase;
+  }
+  .sticky-cta__item--primary { background: var(--ink); color: var(--paper); }
+</style>
+
+<script>
+  function initStickyCta() {
+    const bar = document.querySelector<HTMLElement>('[data-sticky-cta]');
+    const hero = document.querySelector('[data-hero]');
+    const footer = document.querySelector('footer');
+    if (!bar || !hero) return;
+    let pastHero = false;
+    let nearFooter = false;
+    const update = () => {
+      const show = pastHero && !nearFooter;
+      bar.classList.toggle('is-visible', show);
+      bar.setAttribute('aria-hidden', String(!show));
+      bar.querySelectorAll('a').forEach((a) => (a.tabIndex = show ? 0 : -1));
+    };
+    new IntersectionObserver(([e]) => { pastHero = !e.isIntersecting; update(); }).observe(hero);
+    if (footer) new IntersectionObserver(([e]) => { nearFooter = e.isIntersecting; update(); }).observe(footer);
+  }
+  document.addEventListener('astro:page-load', initStickyCta);
+</script>
