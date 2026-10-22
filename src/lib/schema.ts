@@ -1,6 +1,6 @@
 // schema.org JSON-LD for every page. Never include tenant information.
 import { buildings, COMPANY } from './buildings';
-import { routes, type Lang, type RouteKey } from '../i18n/ui';
+import { path, url, type Lang, type RouteKey } from '../i18n/ui';
 
 const pageNames: Record<RouteKey, Record<Lang, string>> = {
   home: { el: 'Αρχική', en: 'Home' },
@@ -13,7 +13,7 @@ const pageNames: Record<RouteKey, Record<Lang, string>> = {
 
 export function buildSchema({ lang, page, site }: { lang: Lang; page: RouteKey; site: URL }) {
   const abs = (p: string) => new URL(p, site).href;
-  const orgId = abs('/#organization');
+  const orgId = abs(url('/#organization'));
 
   const address = {
     '@type': 'PostalAddress',
@@ -32,9 +32,9 @@ export function buildSchema({ lang, page, site }: { lang: Lang; page: RouteKey; 
       legalName: 'ΘΕΟΔΟΣΙΟΥ ΤΕΧΝΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ',
       alternateName: ['Θεοδοσίου Τεχνική Α.Ε.', 'Theodosiou Texniki AE'],
       foundingDate: '2018',
-      url: abs(routes.home[lang]),
-      logo: abs('/icons/icon-512.png'),
-      image: abs(`/og/og-${lang}.png`),
+      url: abs(path('home', lang)),
+      logo: abs(url('/icons/icon-512.png')),
+      image: abs(url(`/og/og-${lang}.png`)),
       telephone: COMPANY.phone,
       email: COMPANY.email,
       address,
@@ -45,8 +45,8 @@ export function buildSchema({ lang, page, site }: { lang: Lang; page: RouteKey; 
     },
     {
       '@type': 'WebSite',
-      '@id': abs('/#website'),
-      url: abs('/'),
+      '@id': abs(url('/#website')),
+      url: abs(path('home', 'el')),
       name: lang === 'el' ? 'Θεοδοσίου Τεχνική Α.Ε.' : 'Theodosiou Texniki AE',
       inLanguage: ['el', 'en'],
       publisher: { '@id': orgId },
@@ -57,8 +57,8 @@ export function buildSchema({ lang, page, site }: { lang: Lang; page: RouteKey; 
     graph.push({
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: pageNames.home[lang], item: abs(routes.home[lang]) },
-        { '@type': 'ListItem', position: 2, name: pageNames[page][lang], item: abs(routes[page][lang]) },
+        { '@type': 'ListItem', position: 1, name: pageNames.home[lang], item: abs(path('home', lang)) },
+        { '@type': 'ListItem', position: 2, name: pageNames[page][lang], item: abs(path(page, lang)) },
       ],
     });
   }
@@ -67,7 +67,7 @@ export function buildSchema({ lang, page, site }: { lang: Lang; page: RouteKey; 
     for (const b of buildings) {
       graph.push({
         '@type': 'Place',
-        '@id': abs(`${routes.buildings[lang]}#building-${b.id}`),
+        '@id': abs(`${path('buildings', lang)}#building-${b.id}`),
         name: b.label[lang],
         description: b.use[lang],
         containedInPlace: { '@type': 'City', name: lang === 'el' ? 'Χαλάνδρι' : 'Chalandri' },

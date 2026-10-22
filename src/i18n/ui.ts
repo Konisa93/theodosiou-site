@@ -12,7 +12,11 @@ export const routes = {
 
 export type RouteKey = keyof typeof routes;
 
-export const path = (key: RouteKey, lang: Lang) => routes[key][lang];
+// Prefixes a site path with the GitHub Pages sub-folder (empty on a custom domain).
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+export const url = (p: string) => (BASE + p) || '/';
+
+export const path = (key: RouteKey, lang: Lang) => url(routes[key][lang]);
 export const other = (lang: Lang): Lang => (lang === 'el' ? 'en' : 'el');
 export const locale = (lang: Lang) => (lang === 'el' ? 'el-GR' : 'en-GB');
 

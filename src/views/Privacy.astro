@@ -16,12 +16,12 @@ const copy = {
     lead: 'Τελευταία ενημέρωση: [ΗΜΕΡΟΜΗΝΙΑ]',
     sections: [
       { h: 'Υπεύθυνος επεξεργασίας', p: `ΘΕΟΔΟΣΙΟΥ ΤΕΧΝΙΚΗ Α.Ε., ${COMPANY.address.el}, ${COMPANY.postcode.el}. ΓΕΜΗ [—], ΑΦΜ [—]. Email: ${COMPANY.email}, τηλ. ${COMPANY.phone}.` },
-      { h: 'Ποια δεδομένα συλλέγουμε', p: 'Μόνο όσα μας δίνετε στη φόρμα επικοινωνίας: ονοματεπώνυμο, εταιρεία, email, τηλέφωνο, το κτίριο που σας ενδιαφέρει και το μήνυμά σας.' },
-      { h: 'Γιατί τα χρησιμοποιούμε', p: 'Για να απαντήσουμε στο αίτημά σας και, αν το ζητήσετε, να σας ενημερώσουμε όταν κάποιο κτίριο διατεθεί. Νομική βάση είναι η συγκατάθεσή σας (άρθρο 6 παρ. 1α ΓΚΠΔ).' },
+      { h: 'Ποια δεδομένα συλλέγουμε', p: 'Η φόρμα επικοινωνίας δεν αποθηκεύει και δεν στέλνει δεδομένα σε κανέναν διακομιστή. Απλώς ετοιμάζει ένα email στη δική σας εφαρμογή email, το οποίο στέλνετε εσείς. Λαμβάνουμε μόνο όσα περιέχει αυτό το email: ονοματεπώνυμο, εταιρεία, email, τηλέφωνο, το κτίριο που σας ενδιαφέρει και το μήνυμά σας.' },
+      { h: 'Γιατί τα χρησιμοποιούμε', p: 'Για να απαντήσουμε στο αίτημά σας και, αν το ζητήσετε, να σας ενημερώσουμε όταν κάποιο κτίριο διατεθεί. Νομική βάση είναι η απάντηση σε δικό σας αίτημα πριν από τη σύναψη σύμβασης (άρθρο 6 παρ. 1β ΓΚΠΔ).' },
       { h: 'Πόσο καιρό τα κρατάμε', p: '[ΔΙΑΣΤΗΜΑ, π.χ. έως 24 μήνες] ή μέχρι να ζητήσετε τη διαγραφή τους.' },
-      { h: 'Ποιος έχει πρόσβαση', p: 'Τα μηνύματα παραλαμβάνονται μέσω της υπηρεσίας φιλοξενίας του ιστότοπου [Netlify / Formspree] και αποστέλλονται στο email της εταιρείας. Δεν πωλούμε ούτε μοιραζόμαστε τα στοιχεία σας για διαφημιστικούς σκοπούς.' },
+      { h: 'Ποιος έχει πρόσβαση', p: 'Τα μηνύματά σας φτάνουν μόνο στο email της εταιρείας. Ο ιστότοπος φιλοξενείται στο GitHub Pages (GitHub, Inc.), το οποίο μπορεί να καταγράφει τεχνικά στοιχεία των επισκεπτών, όπως τη διεύθυνση IP, για λόγους ασφαλείας. Δεν πωλούμε ούτε μοιραζόμαστε τα στοιχεία σας για διαφημιστικούς σκοπούς.' },
       { h: 'Cookies', p: 'Ο ιστότοπος δεν χρησιμοποιεί cookies παρακολούθησης. Για στατιστικά επισκεψιμότητας χρησιμοποιούμε υπηρεσία χωρίς cookies, που δεν αναγνωρίζει προσωπικά τους επισκέπτες. Ο χάρτης του OpenStreetMap φορτώνει μόνο αν τον ζητήσετε.' },
-      { h: 'Τα δικαιώματά σας', p: 'Έχετε δικαίωμα πρόσβασης, διόρθωσης, διαγραφής, περιορισμού και φορητότητας των δεδομένων σας, καθώς και ανάκλησης της συγκατάθεσής σας. Γράψτε μας στο email παραπάνω. Μπορείτε επίσης να υποβάλετε καταγγελία στην Αρχή Προστασίας Δεδομένων Προσωπικού Χαρακτήρα (www.dpa.gr).' },
+      { h: 'Τα δικαιώματά σας', p: 'Έχετε δικαίωμα πρόσβασης, διόρθωσης, διαγραφής, περιορισμού και φορητότητας των δεδομένων σας, καθώς και εναντίωσης στην επεξεργασία. Γράψτε μας στο email παραπάνω. Μπορείτε επίσης να υποβάλετε καταγγελία στην Αρχή Προστασίας Δεδομένων Προσωπικού Χαρακτήρα (www.dpa.gr).' },
     ],
   },
   en: {
@@ -31,12 +31,12 @@ const copy = {
     lead: 'Last updated: [DATE]',
     sections: [
       { h: 'Data controller', p: `THEODOSIOU TEXNIKI AE, ${COMPANY.address.en}, ${COMPANY.postcode.en}. GEMI [—], VAT [—]. Email: ${COMPANY.email}, tel. ${COMPANY.phone}.` },
-      { h: 'What data we collect', p: 'Only what you give us in the contact form: full name, company, email, phone, the building you are interested in and your message.' },
-      { h: 'Why we use it', p: 'To reply to your request and, if you ask us to, to let you know when a building becomes available. The legal basis is your consent (Article 6(1)(a) GDPR).' },
+      { h: 'What data we collect', p: 'The contact form does not store or send data to any server. It simply prepares an email in your own email app, which you send yourself. We only receive what that email contains: full name, company, email, phone, the building you are interested in and your message.' },
+      { h: 'Why we use it', p: 'To reply to your request and, if you ask us to, to let you know when a building becomes available. The legal basis is replying to your own request before entering into a contract (Article 6(1)(b) GDPR).' },
       { h: 'How long we keep it', p: '[PERIOD, e.g. up to 24 months] or until you ask us to delete it.' },
-      { h: 'Who has access', p: "Messages are received through the website's hosting service [Netlify / Formspree] and forwarded to the company's email. We do not sell or share your details for advertising purposes." },
+      { h: 'Who has access', p: "Your messages reach only the company's email inbox. The website is hosted on GitHub Pages (GitHub, Inc.), which may log technical visitor data such as IP addresses for security purposes. We do not sell or share your details for advertising purposes." },
       { h: 'Cookies', p: 'This website does not use tracking cookies. For visitor statistics we use a cookie-free service that does not identify individual visitors. The OpenStreetMap map loads only if you ask for it.' },
-      { h: 'Your rights', p: 'You have the right to access, correct, delete, restrict and port your data, and to withdraw your consent. Email us at the address above. You can also lodge a complaint with the Hellenic Data Protection Authority (www.dpa.gr).' },
+      { h: 'Your rights', p: 'You have the right to access, correct, delete, restrict and port your data, and to object to processing. Email us at the address above. You can also lodge a complaint with the Hellenic Data Protection Authority (www.dpa.gr).' },
     ],
   },
 }[lang];

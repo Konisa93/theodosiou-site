@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { path } from '../i18n/ui';
 ---
 <Base title="Η σελίδα δεν βρέθηκε · Θεοδοσίου Τεχνική Α.Ε." lang="el" noindex>
   <section class="nf wrap" data-hero>
@@ -11,8 +12,8 @@ import Base from '../layouts/Base.astro';
       </h1>
       <p class="t-lead" data-reveal style="--i:6">Η σελίδα που ζητήσατε δεν υπάρχει ή έχει μετακινηθεί.</p>
       <div class="nf__links" data-reveal style="--i:8">
-        <a class="btn" href="/">Αρχική <span class="btn__arrow" aria-hidden="true">→</span></a>
-        <a class="link" href="/ktiria">Τα κτίρια</a>
+        <a class="btn" href={path('home', 'el')}>Αρχική <span class="btn__arrow" aria-hidden="true">→</span></a>
+        <a class="link" href={path('buildings', 'el')}>Τα κτίρια</a>
       </div>
     </div>
     <svg class="nf__art" viewBox="0 0 220 320" fill="none" stroke="currentColor" aria-hidden="true" data-draw>

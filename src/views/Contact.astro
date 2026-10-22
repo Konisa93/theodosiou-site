@@ -17,7 +17,6 @@ const copy = {
     allLeased: 'Όλα τα κτίρια είναι αυτή τη στιγμή μισθωμένα. Αφήστε μας τα στοιχεία σας και θα επικοινωνήσουμε μαζί σας όταν κάποιο διατεθεί.',
     open: 'Πείτε μας τι χρειάζεται η επιχείρησή σας και θα επικοινωνήσουμε μαζί σας.',
     phone: 'Τηλέφωνο', email: 'Email', address: 'Διεύθυνση', hours: 'Ωράριο',
-    honeypot: 'Μην συμπληρώνετε αυτό το πεδίο',
     name: 'Ονοματεπώνυμο *', nameErr: 'Συμπληρώστε το ονοματεπώνυμό σας.',
     company: 'Εταιρεία *', companyErr: 'Συμπληρώστε την εταιρεία σας.',
     emailField: 'Email *', emailErr: 'Συμπληρώστε ένα έγκυρο email.',
@@ -25,15 +24,14 @@ const copy = {
     building: 'Κτίριο ενδιαφέροντος', any: 'Οποιοδήποτε', general: 'Γενική ερώτηση',
     use: 'Χρήση που σας ενδιαφέρει (προαιρετικό)',
     message: 'Μήνυμα',
-    consentPre: 'Συμφωνώ με την επεξεργασία των στοιχείων μου σύμφωνα με την', consentLink: 'Πολιτική Απορρήτου',
-    consentErr: 'Χρειάζεται η συγκατάθεσή σας για να απαντήσουμε.',
-    submit: 'Αποστολή',
+    viaEmail: 'Το μήνυμα ετοιμάζεται στην εφαρμογή email σας και το στέλνετε εσείς. Δείτε την', privacyLink: 'Πολιτική Απορρήτου',
+    submit: 'Συνέχεια στο email',
     reply: 'Απαντάμε συνήθως εντός μίας εργάσιμης ημέρας.',
     msgCheck: 'Ελέγξτε τα πεδία με σήμανση.',
-    msgSending: 'Αποστολή…',
-    msgFail: 'Η αποστολή δεν ολοκληρώθηκε. Δοκιμάστε ξανά ή καλέστε μας στο τηλέφωνο.',
-    msgAbout: 'Θα επικοινωνήσουμε μαζί σας σύντομα για το {b}.',
-    thanks: 'Ευχαριστούμε', received: 'Λάβαμε το μήνυμά σας.', soon: 'Θα επικοινωνήσουμε μαζί σας σύντομα.',
+    msgOpened: 'Η εφαρμογή email σας άνοιξε με το μήνυμα έτοιμο. Πατήστε «Αποστολή» εκεί για να μας το στείλετε.',
+    msgFallback: 'Δεν άνοιξε; Γράψτε μας απευθείας στο',
+    mailSubject: 'Εκδήλωση ενδιαφέροντος: {b}',
+    mailIntro: 'Μήνυμα από τη φόρμα επικοινωνίας της ιστοσελίδας.',
   },
   en: {
     title: 'Contact · Theodosiou Texniki AE',
@@ -44,7 +42,6 @@ const copy = {
     allLeased: "All buildings are currently leased. Leave us your details and we'll contact you when one becomes available.",
     open: "Tell us what your business needs and we'll get back to you.",
     phone: 'Phone', email: 'Email', address: 'Address', hours: 'Office hours',
-    honeypot: 'Do not fill in this field',
     name: 'Full name *', nameErr: 'Please enter your full name.',
     company: 'Company *', companyErr: 'Please enter your company.',
     emailField: 'Email *', emailErr: 'Please enter a valid email address.',
@@ -52,15 +49,14 @@ const copy = {
     building: 'Building of interest', any: 'Any', general: 'General inquiry',
     use: 'Intended use (optional)',
     message: 'Message',
-    consentPre: 'I agree to the processing of my details in line with the', consentLink: 'Privacy Policy',
-    consentErr: 'We need your consent in order to reply.',
-    submit: 'Send',
+    viaEmail: 'Your message is prepared in your own email app and you send it yourself. See our', privacyLink: 'Privacy Policy',
+    submit: 'Continue in email',
     reply: 'We usually reply within one working day.',
     msgCheck: 'Please check the highlighted fields.',
-    msgSending: 'Sending…',
-    msgFail: "Your message couldn't be sent. Please try again or give us a call.",
-    msgAbout: "We'll be in touch soon about {b}.",
-    thanks: 'Thank you', received: 'We have received your message.', soon: "We'll be in touch soon.",
+    msgOpened: 'Your email app has opened with the message ready. Press "Send" there to reach us.',
+    msgFallback: "Didn't open? Email us directly at",
+    mailSubject: 'Expression of interest: {b}',
+    mailIntro: 'Message from the website contact form.',
   },
 }[lang];
 ---
@@ -81,15 +77,9 @@ const copy = {
 
       <div class="contact__form">
         <form
-          name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate data-contact-form
-          data-msg-check={copy.msgCheck} data-msg-sending={copy.msgSending} data-msg-fail={copy.msgFail} data-msg-about={copy.msgAbout}
+          novalidate data-contact-form data-to={COMPANY.email}
+          data-msg-check={copy.msgCheck} data-mail-subject={copy.mailSubject} data-mail-intro={copy.mailIntro}
         >
-          <input type="hidden" name="form-name" value="contact" />
-          <input type="hidden" name="language" value={lang} />
-          <p class="visually-hidden" aria-hidden="true">
-            <label>{copy.honeypot} <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
-          </p>
-
           <label class="field">
             <input class="field__input" type="text" name="name" placeholder=" " autocomplete="name" required aria-describedby="err-name" />
             <span class="field__label">{copy.name}</span>
@@ -135,24 +125,18 @@ const copy = {
             <span class="field__label">{copy.message}</span>
             <span class="field__line"></span>
           </label>
-          <label class="check">
-            <input type="checkbox" name="consent" required aria-describedby="err-consent" />
-            <span>{copy.consentPre} <a class="link" href={path('privacy', lang)}>{copy.consentLink}</a>. *</span>
-          </label>
-          <span class="field__error" id="err-consent" hidden>{copy.consentErr}</span>
+          <p class="t-small muted">{copy.viaEmail} <a class="link" href={path('privacy', lang)}>{copy.privacyLink}</a>.</p>
 
           <div class="form__submit">
             <button class="btn" type="submit" data-submit>{copy.submit} <span class="btn__arrow" aria-hidden="true">→</span></button>
             <span class="t-small muted">{copy.reply}</span>
           </div>
           <p class="form__status t-small" role="status" aria-live="polite" data-form-status></p>
+          <div class="form__opened" data-form-opened hidden>
+            <p class="t-body">{copy.msgOpened}</p>
+            <p class="t-small muted">{copy.msgFallback} <a class="link" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>.</p>
+          </div>
         </form>
-
-        <div class="form__success" data-form-success hidden tabindex="-1">
-          <p class="t-label" style="color: var(--bronze)">{copy.thanks}</p>
-          <p class="t-h2">{copy.received}</p>
-          <p class="t-lead" data-success-text>{copy.soon}</p>
-        </div>
       </div>
     </div>
   </section>
@@ -171,7 +155,8 @@ const copy = {
     if (wanted && [...select.options].some((o) => o.value === wanted)) select.value = wanted;
 
     const status = form.querySelector<HTMLElement>('[data-form-status]')!;
-    const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const opened = form.querySelector<HTMLElement>('[data-form-opened]')!;
+    const labelOf = (el: Element) => (el.closest('.field')?.querySelector('.field__label')?.textContent || '').replace('*', '').trim();
 
     const showError = (input: HTMLInputElement, show: boolean) => {
       const err = document.getElementById(input.getAttribute('aria-describedby') || '');
@@ -180,12 +165,13 @@ const copy = {
       input.closest('.field')?.classList.toggle('field--error', show);
     };
     const fields = [...form.querySelectorAll<HTMLInputElement>('[required]')];
-    fields.forEach((f) => f.addEventListener(f.type === 'checkbox' ? 'change' : 'blur', () => {
-      if (f.dataset.touched || f.type === 'checkbox') showError(f, !f.checkValidity());
+    fields.forEach((f) => f.addEventListener('blur', () => {
+      if (f.dataset.touched) showError(f, !f.checkValidity());
       f.dataset.touched = '1';
     }));
 
-    form.addEventListener('submit', async (e) => {
+    // No server: the message is composed in the visitor's own email app.
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
       const invalid = fields.filter((f) => !f.checkValidity());
       fields.forEach((f) => showError(f, invalid.includes(f)));
@@ -194,27 +180,16 @@ const copy = {
         invalid[0].focus();
         return;
       }
-      submit.disabled = true;
-      status.textContent = msg.msgSending!;
-      try {
-        const body = new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString();
-        // Netlify Forms handles the POST in production; locally we simulate success.
-        const isLocal = ['localhost', '127.0.0.1'].includes(location.hostname);
-        if (!isLocal) {
-          const res = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
-          if (!res.ok) throw new Error(String(res.status));
-        }
-        const label = select.selectedOptions[0]?.textContent || '';
-        const success = document.querySelector<HTMLElement>('[data-form-success]')!;
-        const text = success.querySelector<HTMLElement>('[data-success-text]')!;
-        if (select.value !== 'any' && select.value !== 'general') text.textContent = msg.msgAbout!.replace('{b}', label);
-        form.hidden = true;
-        success.hidden = false;
-        success.focus();
-      } catch {
-        status.textContent = msg.msgFail!;
-        submit.disabled = false;
-      }
+      status.textContent = '';
+      const building = select.selectedOptions[0]?.textContent?.trim() || '';
+      const lines = [msg.mailIntro!, ''];
+      form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>('.field__input').forEach((el) => {
+        const value = el instanceof HTMLSelectElement ? building : el.value.trim();
+        if (value) lines.push(`${labelOf(el)}: ${value}`);
+      });
+      const subject = msg.mailSubject!.replace('{b}', building);
+      window.location.href = `mailto:${msg.to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
+      opened.hidden = false;
     });
   }
   document.addEventListener('astro:page-load', initContactForm);
@@ -231,9 +206,8 @@ const copy = {
   .form__row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gutter); }
   .form__submit { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-5); margin-top: var(--s-4); }
   .form__status:empty { display: none; }
-  .form__success { display: grid; gap: var(--s-5); padding-block: var(--s-8); border-top: 1px solid var(--ink); outline: none; }
-  .form__success[hidden] { display: none; }
-  .btn[disabled] { opacity: 0.6; pointer-events: none; }
+  .form__opened { display: grid; gap: var(--s-2); padding: var(--s-5) var(--s-6); border-left: 2px solid var(--bronze); background: var(--stone); }
+  .form__opened[hidden] { display: none; }
 
   @media (max-width: 960px) {
     .contact__info, .contact__form { grid-column: 1 / -1; }

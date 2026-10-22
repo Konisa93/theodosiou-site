@@ -7,7 +7,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import StickyCta from '../components/StickyCta.astro';
 
-import { routes, type Lang, type RouteKey } from '../i18n/ui';
+import { path, url, type Lang, type RouteKey } from '../i18n/ui';
 import { buildSchema } from '../lib/schema';
 import { PRELAUNCH } from '../../site.config.mjs';
 
@@ -22,9 +22,9 @@ interface Props {
 const { title, description = '', lang = 'el', page, noindex = false, chrome = true } = Astro.props;
 const site = Astro.site!;
 const abs = (p: string) => new URL(p, site).href;
-const alternates = page ? routes[page] : null;
+const alternates = page ? { el: path(page, 'el'), en: path(page, 'en') } : null;
 const robots = PRELAUNCH || noindex ? 'noindex, nofollow' : 'index, follow';
-const ogImage = abs(`/og/og-${lang}.png`);
+const ogImage = abs(url(`/og/og-${lang}.png`));
 const siteName = lang === 'el' ? 'Θεοδοσίου Τεχνική Α.Ε.' : 'Theodosiou Texniki AE';
 const schema = page ? JSON.stringify(buildSchema({ lang, page, site })) : null;
 ---
@@ -36,6 +36,14 @@ const schema = page ? JSON.stringify(buildSchema({ lang, page, site })) : null;
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
     <meta name="robots" content={robots} />
+    {/* GitHub Pages can't send custom headers, so the security policy lives here (production builds only). */}
+    {import.meta.env.PROD && (
+      <meta
+        http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src https://www.openstreetmap.org; form-action 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
+      />
+    )}
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     {alternates && (
       <>
         <link rel="canonical" href={abs(alternates[lang])} />
@@ -60,10 +68,10 @@ const schema = page ? JSON.stringify(buildSchema({ lang, page, site })) : null;
     <meta name="twitter:card" content="summary_large_image" />
 
     <meta name="theme-color" content="#F5F2EC" />
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" href={url('/favicon.ico')} sizes="32x32" />
+    <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={url('/icons/apple-touch-icon.png')} />
+    <link rel="manifest" href={url('/site.webmanifest')} />
     {schema && <script type="application/ld+json" set:html={schema} />}
     <script is:inline>document.documentElement.classList.add('js');</script>
     <ClientRouter fallback="swap" />

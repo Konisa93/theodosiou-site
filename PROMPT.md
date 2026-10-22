@@ -110,9 +110,9 @@ Motion should feel **slow, smooth and precise**, like an architect's pen, never 
 - **Astro** (static output) with View Transitions, plain CSS (or Tailwind configured with the design tokens), minimal vanilla JS. No React unless a component really needs it.
 - **i18n:** Greek is the default at `/`, English at `/en/`. Translated URL slugs (`/ktiria` → `/en/buildings`). The language switcher goes to the same page in the other language. `hreflang` + `x-default` tags. Set `lang="el"` / `lang="en"` correctly.
 - **Building data** lives in one editable file (`src/data/buildings.json` or an Astro content collection with a typed schema): label, address, use, plot and building area, floors, frontage, parking, features, status (`leased` / `available` / `available_from` + date). Pages, the table, the form dropdown and the key numbers all read from it, so nothing is duplicated. No tenant field.
-- **Form:** works on static hosting via Netlify Forms or Formspree (`[FORM_ENDPOINT]`), with a honeypot field, client-side validation, accessible error messages, and an inline success state (no page reload).
+- **Form:** no server or outside service. After client-side validation with accessible error messages, it opens the visitor's own email app with a ready message (`mailto:` with subject and all fields) addressed to the company.
 - **Analytics:** cookie-free and GDPR-friendly (Plausible or Umami, `[ANALYTICS]`). Track: form submit, phone click, email click, "I'm interested" click (with the space code), language switch. No Google Analytics, so no cookie banner.
-- **Hosting:** Netlify or Vercel. Add security headers (HSTS, a sensible Content-Security-Policy, X-Content-Type-Options, Referrer-Policy) and redirects from non-www to www (or the other way round).
+- **Hosting:** GitHub only. GitHub Actions builds the site and publishes it to GitHub Pages; it must work both under `<user>.github.io/<repo>` and on the custom domain. Enforce HTTPS; set the Content-Security-Policy and Referrer-Policy as `<meta>` tags, since Pages has no custom headers.
 - **Optional phase 2:** a git-based CMS (Decap CMS) so the client can edit buildings, statuses and texts through a simple admin screen. Structure the data so this is easy to add later.
 
 ## 7. Information architecture and pages
@@ -221,7 +221,6 @@ Navigation: **Κτίρια / Buildings · Η Εταιρεία / Company · Το�
 | `[EMAIL]` | Email that receives inquiries |
 | `[HOURS]` | Office hours |
 | `[GEMI_NUMBER]`, `[VAT_NUMBER]`, `[TAX_OFFICE]` | Company legal details (ΓΕΜΗ, ΑΦΜ, ΔΟΥ) |
-| `[FORM_ENDPOINT]` | Formspree endpoint (not needed with Netlify Forms) |
 | `[ANALYTICS]` | Plausible or Umami account |
 | `[total m²]` | Total area of the three buildings |
 | `[BUILDING FEATURES]` | Frontage, parking, visibility, access, energy class, etc. |

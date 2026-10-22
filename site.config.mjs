@@ -1,6 +1,10 @@
 // Launch settings shared by astro.config.mjs and the site code.
-export const SITE_URL = 'https://www.example.gr'; // [DOMAIN] the final www address
+// The GitHub Pages workflow fills SITE_ORIGIN and BASE_PATH automatically:
+//   before a custom domain:  https://<user>.github.io  +  /<repository>
+//   with a custom domain:    https://www.<domain>      +  /
+export const SITE_URL = process.env.SITE_ORIGIN || 'https://www.example.gr'; // [DOMAIN]
+export const BASE_PATH = process.env.BASE_PATH || '/';
 
 // While true, every page carries noindex and robots.txt blocks all crawlers.
-// Set to false on launch day, then rebuild and deploy.
+// Set to false on launch day, then commit and push.
 export const PRELAUNCH = true;
