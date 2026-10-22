@@ -50,7 +50,6 @@ const copy = {
   <PageIntro eyebrow={copy.eyebrow} lines={copy.lines} lead={copy.lead}>
     {allLeased && (
       <p class="notice t-small" data-reveal style="--i:8">
-        <span class="status status--rented" aria-hidden="true"></span>
         {copy.notice}
         <a class="link" href={contact}>{copy.noticeLink}</a>
       </p>
@@ -135,7 +134,7 @@ const copy = {
   .notice {
     display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-3);
     max-width: 52em; padding: var(--s-5) var(--s-6);
-    border: 1px solid var(--hairline); color: var(--graphite);
+    border-left: 2px solid var(--bronze); background: var(--stone); color: var(--graphite);
   }
   .notice .link { color: var(--ink); }
 
@@ -173,7 +172,7 @@ const copy = {
     .bb__art :global(svg) { max-height: 260px; }
     .head .t-h2 { grid-column: 1 / -1; }
   }
-  @media (max-width: 760px) {
+  @media (max-width: 960px) {
     .spaces th[scope='row'] { display: flex; justify-content: space-between; width: 100%; padding: var(--s-2) 0; border: 0; font-size: var(--fs-body); }
     .spaces th[scope='row']::before {
       content: attr(data-label); color: var(--graphite); font-size: var(--fs-label);

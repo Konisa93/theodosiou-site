@@ -162,14 +162,16 @@ Privacy choices:
 - The map loads from OpenStreetMap only when the visitor clicks "Show map".
 - The form sends nothing to any server.
 
-If you add analytics later, choose a cookie-free service (Plausible or Umami) and add its domain to `script-src` and `connect-src` in the Content-Security-Policy in `src/layouts/Base.astro`.
+If you add analytics later, choose a cookie-free service (Plausible or Umami), add its domain to `script-src` and `connect-src` in the Content-Security-Policy in `src/layouts/Base.astro`, **and update the privacy policy**: it currently states, correctly, that the site uses no analytics.
+
+Before launch, the client must fill in the privacy policy placeholders (retention period, email provider, update date), confirm the GitHub data-transfer line, and have the whole policy reviewed by their legal advisor.
 
 ---
 
 ## 8. Design rules (keep the site consistent)
 
 - **No photographs.** Every visual is an abstract line drawing in SVG.
-- **Colours** come only from `src/styles/tokens.css`: Paper, Stone, Ink, Graphite, Hairline, and Bronze for small details only.
+- **Colours** come only from `src/styles/tokens.css`: Paper, Stone, Ink, Graphite, Hairline, and Bronze for lines and large letters only. Small bronze text uses `--accent-text` (deeper on light backgrounds, lighter on dark ones), so it stays readable (WCAG AA).
 - **Headings** use Noto Serif Display; text and buttons use Inter.
 - **Motion** is slow and smooth, with no bounce. Visitors who choose "reduce motion" on their device see everything without animation.
 - **Greek capitals** have no accents. The site handles this automatically through `text-transform`, so type headings normally, with accents.

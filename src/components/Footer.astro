@@ -42,7 +42,9 @@ const year = new Date().getFullYear();
   .site-footer__top { row-gap: var(--s-7); padding-bottom: var(--s-9); }
   .site-footer__brand { grid-column: 1 / span 5; }
   .site-footer__nav { grid-column: 7 / span 2; }
-  .site-footer__nav ul { list-style: none; padding: 0; display: grid; gap: var(--s-3); }
+  .site-footer__nav ul { list-style: none; padding: 0; display: grid; }
+  .site-footer__nav li a { display: inline-block; padding-block: 11px; }
+  .site-footer__contact a { padding-block: 10px; margin-block: -10px; }
   .site-footer__contact { grid-column: 10 / span 3; font-style: normal; display: grid; gap: var(--s-3); align-content: start; color: var(--paper-muted); }
   .site-footer__contact a { color: var(--paper); justify-self: start; }
   .site-footer__legal { padding-top: var(--s-6); display: grid; gap: var(--s-2); font-size: var(--fs-label); letter-spacing: 0.04em; color: var(--paper-muted); }

@@ -6,7 +6,11 @@
   --ink: #15181B;
   --graphite: #5E5A54;
   --hairline: #D6CFC2;
-  --bronze: #9A7B4F;
+  --bronze: #9A7B4F;        /* lines, marks, large letters only (3.5:1 on paper) */
+  --bronze-deep: #6F5531;   /* small bronze text on light backgrounds, button hover fill (6.2:1) */
+  --bronze-light: #B8976A;  /* small bronze text on ink (6.5:1) */
+  --accent-text: var(--bronze-deep);
+  --field-line: #8A8378;    /* form field underline, meets 3:1 for UI boundaries */
   --ink-hairline: #33373B; /* rules on dark sections */
   --paper-muted: #B9B3A8;  /* secondary text on dark sections */
 

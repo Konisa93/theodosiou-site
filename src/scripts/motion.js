@@ -45,7 +45,8 @@ export function initMotion(root = document) {
       reveal(entry.target);
       observer.unobserve(entry.target);
     });
-  }, { threshold: 0.2, rootMargin: '0px 0px -5% 0px' });
+    // threshold 0 + bottom margin: tall blocks (e.g. the table on phones) still reveal
+  }, { threshold: 0, rootMargin: '0px 0px -12% 0px' });
 
   root.querySelectorAll(TARGETS).forEach((el) => observer.observe(el));
 }

@@ -249,7 +249,7 @@ const copy = {
   }
   .why__list li:first-child { border-top: 1px solid var(--ink-hairline); }
   .why__list .t-small { margin-top: var(--s-2); max-width: 34em; }
-  .why__num { color: var(--bronze); padding-top: 0.6em; }
+  .why__num { color: var(--accent-text); padding-top: 0.6em; }
 
   /* Location */
   .location { row-gap: var(--s-8); align-items: center; }
@@ -267,8 +267,9 @@ const copy = {
     .hero { min-height: auto; row-gap: var(--s-8); }
     .hero__text, .hero__art { grid-column: 1 / -1; }
     .hero__art { order: -1; max-width: 520px; }
-    .numbers { grid-template-columns: 1fr 1fr; row-gap: var(--s-7); }
-    .numbers > div:nth-child(3) { border-left: 0; padding-left: 0; }
+    .numbers > div { padding-right: var(--s-3); }
+    .numbers > div + div { padding-left: var(--s-4); }
+    .numbers dd { font-size: clamp(1.75rem, 7vw, 2.75rem); }
     .head .t-h2, .head .t-body { grid-column: 1 / -1; }
     .buildings { grid-template-columns: minmax(0, 1fr); gap: var(--s-8); }
     .building__art { padding: var(--s-6) var(--s-5) var(--s-4); }

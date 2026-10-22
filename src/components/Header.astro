@@ -75,7 +75,7 @@ const enHref = path(page ?? 'home', 'en');
 
   .site-header__actions { display: flex; align-items: center; gap: var(--s-5); }
   .lang-switch { display: flex; gap: var(--s-2); color: var(--graphite); }
-  .lang-switch a { padding: var(--s-2) 2px; transition: color var(--dur-fast) var(--ease-out); }
+  .lang-switch a { padding: 13px 4px; transition: color var(--dur-fast) var(--ease-out); }
   .lang-switch a:hover, .lang-switch a[aria-current] { color: var(--ink); }
 
   .menu-toggle {
@@ -117,10 +117,17 @@ const enHref = path(page ?? 'home', 'en');
 </style>
 
 <script>
+  // Window/document listeners outlive the header, which is replaced on every
+  // client-side navigation, so they are dropped before the next page sets them up.
+  let listeners: AbortController | undefined;
+
   function initHeader() {
     const header = document.querySelector<HTMLElement>('[data-header]');
     if (!header || header.dataset.ready) return;
     header.dataset.ready = '1';
+    listeners?.abort();
+    listeners = new AbortController();
+    const { signal } = listeners;
 
     let lastY = window.scrollY;
     const onScroll = () => {
@@ -131,7 +138,7 @@ const enHref = path(page ?? 'home', 'en');
       if (y < lastY - 2) header.classList.remove('is-hidden');
       lastY = y;
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true, signal });
     onScroll();
 
     const toggle = header.querySelector<HTMLButtonElement>('[data-menu-toggle]');
@@ -150,7 +157,9 @@ const enHref = path(page ?? 'home', 'en');
       }
     };
     toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); }, { signal });
   }
   document.addEventListener('astro:page-load', initHeader);
+  // Leaving a page with the mobile menu open must not keep the next page scroll-locked.
+  document.addEventListener('astro:before-swap', () => { document.documentElement.style.overflow = ''; });
 </script>
