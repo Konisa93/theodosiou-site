@@ -1,7 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageIntro from '../components/PageIntro.astro';
+import Email from '../components/Email.astro';
 import { buildings, COMPANY, allLeased } from '../lib/buildings';
+
+// The recipient is encoded like components/Email.astro, so bots can't read it from the source.
+const encodedTo = Buffer.from([...COMPANY.email].reverse().join('')).toString('base64');
 import { path, type Lang } from '../i18n/ui';
 
 interface Props { lang: Lang; }
@@ -69,7 +73,7 @@ const copy = {
         <p class="t-lead" data-reveal>{allLeased ? copy.allLeased : copy.open}</p>
         <dl class="contact__list" data-reveal-group>
           <div data-reveal><dt class="t-label muted">{copy.phone}</dt><dd><a class="link" href={COMPANY.phoneHref}>{COMPANY.phone}</a></dd></div>
-          <div data-reveal><dt class="t-label muted">{copy.email}</dt><dd><a class="link" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></dd></div>
+          <div data-reveal><dt class="t-label muted">{copy.email}</dt><dd><Email /></dd></div>
           <div data-reveal><dt class="t-label muted">{copy.address}</dt><dd>{COMPANY.area[lang]}</dd></div>
           <div data-reveal><dt class="t-label muted">{copy.hours}</dt><dd>{COMPANY.hours[lang]}</dd></div>
         </dl>
@@ -77,9 +81,13 @@ const copy = {
 
       <div class="contact__form">
         <form
-          novalidate data-contact-form data-to={COMPANY.email}
+          novalidate data-contact-form data-e={encodedTo}
           data-msg-check={copy.msgCheck} data-mail-subject={copy.mailSubject} data-mail-intro={copy.mailIntro}
         >
+          <!-- Bot trap: hidden from people and screen readers; bots that fill every field reveal themselves. -->
+          <div class="trap" aria-hidden="true">
+            <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" data-trap /></label>
+          </div>
           <label class="field">
             <input class="field__input" type="text" name="name" placeholder=" " autocomplete="name" required aria-describedby="err-name" />
             <span class="field__label">{copy.name}</span>
@@ -134,7 +142,7 @@ const copy = {
           <p class="form__status t-small" role="status" aria-live="polite" data-form-status></p>
           <div class="form__opened" data-form-opened hidden>
             <p class="t-body">{copy.msgOpened}</p>
-            <p class="t-small muted">{copy.msgFallback} <a class="link" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>.</p>
+            <p class="t-small muted">{copy.msgFallback} <Email />.</p>
           </div>
         </form>
       </div>
@@ -143,11 +151,15 @@ const copy = {
 </Base>
 
 <script>
+  import { decodeEmail } from '../scripts/email.js';
+
   function initContactForm() {
     const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
     if (!form || form.dataset.ready) return;
     form.dataset.ready = '1';
     const msg = form.dataset;
+    const loadedAt = Date.now();
+    const trap = form.querySelector<HTMLInputElement>('[data-trap]')!;
 
     // Pre-select the building from ?building=a
     const select = form.querySelector<HTMLSelectElement>('[data-building-select]')!;
@@ -181,6 +193,8 @@ const copy = {
         return;
       }
       status.textContent = '';
+      // Bots fill the hidden field or submit instantly: pretend it worked and send nothing.
+      if (trap.value || Date.now() - loadedAt < 3000) { opened.hidden = false; return; }
       const building = select.selectedOptions[0]?.textContent?.trim() || '';
       const lines = [msg.mailIntro!, ''];
       form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>('.field__input').forEach((el) => {
@@ -188,7 +202,7 @@ const copy = {
         if (value) lines.push(`${labelOf(el)}: ${value}`);
       });
       const subject = msg.mailSubject!.replace('{b}', building);
-      window.location.href = `mailto:${msg.to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
+      window.location.href = `mailto:${decodeEmail(msg.e!)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
       opened.hidden = false;
     });
   }
@@ -196,6 +210,7 @@ const copy = {
 </script>
 
 <style>
+  .trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
   .contact .grid { row-gap: var(--s-9); }
   .contact__info { grid-column: 1 / span 5; display: grid; gap: var(--s-8); align-content: start; }
   .contact__list { border-top: 1px solid var(--ink); }

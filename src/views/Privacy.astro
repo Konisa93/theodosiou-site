@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageIntro from '../components/PageIntro.astro';
-import { COMPANY } from '../lib/buildings';
+import { COMPANY, spellEmail } from '../lib/buildings';
 import type { Lang } from '../i18n/ui';
 
 interface Props { lang: Lang; }
@@ -15,7 +15,7 @@ const copy = {
     lines: ['Τα στοιχεία σας,', 'με προσοχή.'],
     lead: 'Τελευταία ενημέρωση: [ΗΜΕΡΟΜΗΝΙΑ]',
     sections: [
-      { h: 'Υπεύθυνος επεξεργασίας', p: `ΘΕΟΔΟΣΙΟΥ ΤΕΧΝΙΚΗ Α.Ε., με έδρα το ${COMPANY.seat.el}. ΓΕΜΗ [—], ΑΦΜ [—]. Email: ${COMPANY.email}, τηλ. ${COMPANY.phone}.` },
+      { h: 'Υπεύθυνος επεξεργασίας', p: `ΘΕΟΔΟΣΙΟΥ ΤΕΧΝΙΚΗ Α.Ε., με έδρα το ${COMPANY.seat.el}. ΓΕΜΗ [—], ΑΦΜ [—]. Email: ${spellEmail(COMPANY.email)}, τηλ. ${COMPANY.phone}.` },
       { h: 'Ποια δεδομένα συλλέγουμε', p: 'Η φόρμα επικοινωνίας δεν αποθηκεύει και δεν στέλνει δεδομένα σε κανέναν διακομιστή. Απλώς ετοιμάζει ένα email στη δική σας εφαρμογή email, το οποίο στέλνετε εσείς. Λαμβάνουμε μόνο όσα περιέχει αυτό το email: ονοματεπώνυμο, εταιρεία, email, τηλέφωνο, το κτίριο που σας ενδιαφέρει και το μήνυμά σας. Η παροχή τους δεν είναι υποχρεωτική, αλλά χωρίς αυτά δεν μπορούμε να σας απαντήσουμε.' },
       { h: 'Γιατί τα χρησιμοποιούμε', p: 'Για να απαντήσουμε στο αίτημά σας και, αν το ζητήσετε, να σας ενημερώσουμε όταν κάποιο κτίριο διατεθεί. Νομική βάση είναι η απάντηση σε δικό σας αίτημα πριν από τη σύναψη σύμβασης (άρθρο 6 παρ. 1β ΓΚΠΔ). Δεν λαμβάνουμε αυτοματοποιημένες αποφάσεις και δεν δημιουργούμε προφίλ.' },
       { h: 'Πόσο καιρό τα κρατάμε', p: '[ΔΙΑΣΤΗΜΑ, π.χ. έως 24 μήνες] ή μέχρι να ζητήσετε τη διαγραφή τους.' },
@@ -33,7 +33,7 @@ const copy = {
     lines: ['Your details,', 'handled with care.'],
     lead: 'Last updated: [DATE]',
     sections: [
-      { h: 'Data controller', p: `THEODOSIOU TEXNIKI AE, registered seat ${COMPANY.seat.en}, Greece. GEMI [—], VAT [—]. Email: ${COMPANY.email}, tel. ${COMPANY.phone}.` },
+      { h: 'Data controller', p: `THEODOSIOU TEXNIKI AE, registered seat ${COMPANY.seat.en}, Greece. GEMI [—], VAT [—]. Email: ${spellEmail(COMPANY.email)}, tel. ${COMPANY.phone}.` },
       { h: 'What data we collect', p: 'The contact form does not store or send data to any server. It simply prepares an email in your own email app, which you send yourself. We only receive what that email contains: full name, company, email, phone, the building you are interested in and your message. Providing these details is optional, but without them we cannot reply.' },
       { h: 'Why we use it', p: 'To reply to your request and, if you ask us to, to let you know when a building becomes available. The legal basis is replying to your own request before entering into a contract (Article 6(1)(b) GDPR). We make no automated decisions and do no profiling.' },
       { h: 'How long we keep it', p: '[PERIOD, e.g. up to 24 months] or until you ask us to delete it.' },

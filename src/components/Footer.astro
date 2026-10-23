@@ -2,6 +2,7 @@
 import Logo from './Logo.astro';
 import { navItems, contactLabel, path, type Lang } from '../i18n/ui';
 import { COMPANY } from '../lib/buildings';
+import Email from './Email.astro';
 
 interface Props { lang?: Lang; }
 const { lang = 'el' } = Astro.props;
@@ -21,7 +22,7 @@ const year = new Date().getFullYear();
       <address class="site-footer__contact">
         <span>{COMPANY.area[lang]}</span>
         <a class="link" href={COMPANY.phoneHref}>{COMPANY.phone}</a>
-        <a class="link" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
+        <Email />
       </address>
     </div>
     <hr class="rule" />

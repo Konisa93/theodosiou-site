@@ -27,10 +27,13 @@ export const statusLabel = (b: Building, lang: Lang = 'el') => {
 export const statusClass = (b: Building) =>
   b.status === 'leased' ? 'status--rented' : b.status === 'available_from' ? 'status--soon' : '';
 
+// Human-readable but not machine-harvestable form of an email address.
+export const spellEmail = (email: string) => email.replace('@', ' [at] ').replace(/\./g, ' [dot] ');
+
 export const COMPANY = {
   phone: '+30 210 XXX XXXX', // [PHONE]
   phoneHref: 'tel:+30210XXXXXXX',
-  email: 'info@example.gr', // [EMAIL]
+  email: 'info@theodosiouae.com', // shown only through components/Email.astro (hidden from bots)
   // Where the buildings are. The registered office's street address is deliberately not published.
   area: { el: 'Κέντρο Χαλανδρίου', en: 'Central Chalandri' },
   // Statutory seat (έδρα) of the Α.Ε. is the municipality, required in the legal notice.

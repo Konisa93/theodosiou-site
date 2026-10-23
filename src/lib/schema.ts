@@ -34,7 +34,6 @@ export function buildSchema({ lang, page, site }: { lang: Lang; page: RouteKey; 
       logo: abs(url('/icons/icon-512.png')),
       image: abs(url(`/og/og-${lang}.png`)),
       telephone: COMPANY.phone,
-      email: COMPANY.email,
       address,
       // [COORDINATES] confirm with the client
       geo: { '@type': 'GeoCoordinates', latitude: 38.0213, longitude: 23.7987 },

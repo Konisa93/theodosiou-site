@@ -1,0 +1,13 @@
+---
+// Email link that address-harvesting bots can't read from the page source.
+// The address is stored base64-encoded and reversed, and assembled in the
+// browser (scripts/email.js). Without JavaScript, a readable "info [at] …" shows.
+import { COMPANY } from '../lib/buildings';
+
+interface Props { class?: string; }
+const { class: cls = 'link' } = Astro.props;
+
+const [user, domain] = COMPANY.email.split('@');
+const encoded = Buffer.from([...COMPANY.email].reverse().join('')).toString('base64');
+---
+<a class={cls} data-e={encoded} href="#" rel="nofollow">{user} [at] {domain.replace(/\./g, ' [dot] ')}</a>

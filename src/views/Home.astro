@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import BuildingsDrawing from '../components/BuildingsDrawing.astro';
 import BuildingElevation from '../components/BuildingElevation.astro';
 import AreaMap from '../components/AreaMap.astro';
+import Email from '../components/Email.astro';
 import { buildings, areaLabel, leasedCount, allLeased, statusLabel, statusClass, COMPANY } from '../lib/buildings';
 import { path, type Lang } from '../i18n/ui';
 
@@ -189,7 +190,7 @@ const copy = {
         <div class="closing__actions" data-reveal>
           <a class="btn" href={path('contact', lang)}>{copy.ctaButton} <span class="btn__arrow" aria-hidden="true">→</span></a>
           <a class="link" href={COMPANY.phoneHref}>{COMPANY.phone}</a>
-          <a class="link" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
+          <Email />
         </div>
       </div>
     </div>

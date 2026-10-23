@@ -86,7 +86,8 @@ const schema = page ? JSON.stringify(buildSchema({ lang, page, site })) : null;
     {chrome && <StickyCta lang={lang} />}
     <script>
       import { initMotion } from '../scripts/motion.js';
-      document.addEventListener('astro:page-load', () => initMotion());
+      import { initEmails } from '../scripts/email.js';
+      document.addEventListener('astro:page-load', () => { initMotion(); initEmails(); });
     </script>
   </body>
 </html>
