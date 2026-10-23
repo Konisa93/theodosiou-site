@@ -126,7 +126,7 @@ To protect the domain from being claimed by another GitHub account, verify it on
 ### Launch checklist
 - [ ] Replace every `[PLACEHOLDER]` in square brackets (search the project for `[`).
 - [ ] Fill in the real building data in `src/data/buildings.json` (leave `area` and `plot` as `null`), and remove the "sample figures" notes in `src/views/Home.astro` and `src/views/Buildings.astro`.
-- [ ] Set the real phone, **email** (the form sends to it), postcode, office hours, ΓΕΜΗ, ΑΦΜ and ΔΟΥ.
+- [ ] Set the real phone and office hours (email, ΓΕΜΗ and ΑΦΜ are done).
 - [ ] Set the building coordinates in `src/views/Location.astro` and `src/lib/schema.ts`.
 - [ ] Have the privacy policy (`src/views/Privacy.astro`) reviewed by the client's legal advisor.
 - [ ] Have a native speaker check the English copy.

@@ -30,6 +30,8 @@ export function buildSchema({ lang, page, site }: { lang: Lang; page: RouteKey; 
       legalName: 'ΘΕΟΔΟΣΙΟΥ ΤΕΧΝΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ',
       alternateName: ['Θεοδοσίου Τεχνική Α.Ε.', 'Theodosiou Texniki AE'],
       foundingDate: '2018',
+      vatID: `EL${COMPANY.vat}`,
+      identifier: { '@type': 'PropertyValue', propertyID: 'GEMI', value: COMPANY.gemi },
       url: abs(path('home', lang)),
       logo: abs(url('/icons/icon-512.png')),
       image: abs(url(`/og/og-${lang}.png`)),

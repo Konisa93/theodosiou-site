@@ -20,7 +20,7 @@ The design direction is **minimal luxury with professional motion**: think of an
 - **Location:** the buildings are in the centre of Chalandri. Show «Κέντρο Χαλανδρίου» / "Central Chalandri", never a street address. The registered office (Πλάτωνος 11) is not published; the legal notice shows only the statutory seat: «Έδρα: Χαλάνδρι Αττικής».
 - **Phone:** [PHONE]
 - **Email:** [EMAIL] (inquiry form sends here)
-- **Legal details for the footer (required for an Α.Ε. in Greece):** ΓΕΜΗ [GEMI_NUMBER], ΑΦΜ [VAT_NUMBER], ΔΟΥ [TAX_OFFICE]
+- **Legal details for the footer (required for an Α.Ε. in Greece):** Αρ. ΓΕΜΗ 144390501000, ΑΦΜ 800896270, Έδρα: Χαλάνδρι Αττικής
 - **What they do:** a technical and construction company that owns and manages **3 commercial buildings** in Chalandri. The buildings were **transferred into the company in 2018** (they were not built in 2018, and the site must not claim the company built them). Each building is leased **whole and separately** to one tenant. There are no individual units or floors for rent.
 - **Current status:** all three buildings are currently leased to well-known retail chains.
 - **Main selling point:** one owning company with a technical background, so the buildings are well maintained and can be adapted to a tenant's needs. Leasing may go through agents, so never claim "no agents", "no middlemen" or "directly from the owner".
@@ -220,7 +220,6 @@ Navigation: **Κτίρια / Buildings · Η Εταιρεία / Company · Το�
 | `[PHONE]` | Company phone |
 | `[EMAIL]` | Email that receives inquiries |
 | `[HOURS]` | Office hours |
-| `[GEMI_NUMBER]`, `[VAT_NUMBER]`, `[TAX_OFFICE]` | Company legal details (ΓΕΜΗ, ΑΦΜ, ΔΟΥ) |
 | `[ANALYTICS]` | Plausible or Umami account |
 | `[BUILDING FEATURES]` | Frontage, parking, visibility, access, energy class, etc. |
 | Buildings | For each of the 3 buildings: label, address, use, floors, features, status and lease end date if it should be shown |

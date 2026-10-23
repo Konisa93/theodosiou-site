@@ -36,6 +36,9 @@ export const COMPANY = {
   email: 'info@theodosiouae.com', // shown only through components/Email.astro (hidden from bots)
   // Where the buildings are. The registered office's street address is deliberately not published.
   area: { el: 'Κέντρο Χαλανδρίου', en: 'Central Chalandri' },
+  // Legal notice: ΓΕΜΗ and statutory seat are required for an Α.Ε.; ΑΦΜ is shown too.
+  gemi: '144390501000',
+  vat: '800896270',
   // Statutory seat (έδρα) of the Α.Ε. is the municipality, required in the legal notice.
   seat: { el: 'Χαλάνδρι Αττικής', en: 'Chalandri, Attica' },
   hours: {
